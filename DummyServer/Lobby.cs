@@ -6,7 +6,7 @@ namespace DummyServer
 {
     public class Lobby
     {
-        private List<Player> players;
+        private List<Player> players = new List<Player>();
         private Player leader;
 
         public Lobby (Player _leader)

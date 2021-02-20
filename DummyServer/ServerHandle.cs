@@ -60,6 +60,18 @@ namespace DummyServer
         {
             Player inviter = Server.playerDatabase.GetPlayerById(_fromClient);
             Player invitee = Server.playerDatabase.GetPlayerByName(_packet.ReadString());
+            if(invitee == null)
+            {
+                Console.WriteLine("No such player to invite");
+                //TODO send notification that no such player exist
+                return;
+            }
+            if(!invitee.isLoggedIn)
+            {
+                Console.WriteLine("Player not online or not given id");
+                //TODO send notification that player not online or not given id
+                return;
+            }
             Console.WriteLine("Invitation sent");
             ServerSend.InviteToLobby(invitee.id, inviter.username);
         }

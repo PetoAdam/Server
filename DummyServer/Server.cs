@@ -10,6 +10,7 @@ namespace DummyServer
     {
         public static int MaxPlayers { get; private set; }
         public static PlayerDatabase playerDatabase;
+        public static LobbyDatabase lobbyDatabase;
         public static int Port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
@@ -59,11 +60,16 @@ namespace DummyServer
 
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
-                { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived }
+                { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
+                { (int) ClientPackets.createLobby, ServerHandle.CreateLobby},
+                { (int)ClientPackets.inviteToLobby, ServerHandle.InviteToLobby },
+                { (int)ClientPackets.joinLobby, ServerHandle.JoinLobby }
+         
             };
             Console.WriteLine("Initialized packets.");
 
             playerDatabase = new PlayerDatabase();
+            lobbyDatabase = new LobbyDatabase();
         }
     }
 }

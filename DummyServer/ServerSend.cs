@@ -55,5 +55,39 @@ namespace DummyServer
                 SendTCPData(_toClient, _packet);
             }
         }
+
+        public static void InviteToLobby(int _toClient, string _msg)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.inviteToLobby))
+            {
+                _packet.Write(_msg);
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void JoinedLobby(int _toClient, string _msg)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.joinedLobby))
+            {
+                _packet.Write(_msg);
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+
+        public static void CantJoinLobby(int _toClient, string _msg)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.cantJoinLobby))
+            {
+                _packet.Write(_msg);
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
     }
 }

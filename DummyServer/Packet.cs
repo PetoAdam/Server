@@ -8,13 +8,19 @@ namespace DummyServer
     public enum ServerPackets
     {
         welcome = 1,
-        login = 2
+        login = 2,
+        inviteToLobby = 3,
+        joinedLobby = 4,
+        cantJoinLobby = 5
     }
 
     /// <summary>Sent from client to server.</summary>
     public enum ClientPackets
     {
-        welcomeReceived = 1
+        welcomeReceived = 1,
+        createLobby = 2,
+        inviteToLobby = 3,
+        joinLobby = 4
     }
 
     public class Packet : IDisposable

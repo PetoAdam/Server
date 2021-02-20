@@ -23,10 +23,12 @@ namespace DummyServer
             //TODO check username and password -- create and send packet - if login is unsuccessful dc after
             if(_loginMode == 1)
             {
-                if (Server.playerDatabase.Login(new Player(_username, _password), _fromClient))
+                if (Server.playerDatabase.Login(new Player(_username, _password, _fromClient), _fromClient))
                 {
+
                     Console.WriteLine($"Player {_username} logged in.");
                     ServerSend.Login(_fromClient, "Success");
+
                     //TODO send addition data of player (rank, MMR etc.)
                 }
                 else
@@ -37,7 +39,7 @@ namespace DummyServer
             }
             if(_loginMode == 2)
             {
-                if(Server.playerDatabase.Register(new Player(_username, _password), _fromClient))
+                if(Server.playerDatabase.Register(new Player(_username, _password, _fromClient), _fromClient))
                 {
                     Console.WriteLine($"Player {_username} signed up and logged in.");
                     ServerSend.Login(_fromClient, "Success");
@@ -52,6 +54,48 @@ namespace DummyServer
 
             //TODO bind player to clientID
             //TODO: wait for player to start matchmaking then send player into game
+        }
+
+        public static void InviteToLobby(int _fromClient, Packet _packet)
+        {
+            Player inviter = Server.playerDatabase.GetPlayerById(_fromClient);
+            Player invitee = Server.playerDatabase.GetPlayerByName(_packet.ReadString());
+            Console.WriteLine("Invitation sent");
+            ServerSend.InviteToLobby(invitee.id, inviter.username);
+        }
+
+        public static void JoinLobby(int _fromClient, Packet _packet)
+        {
+            Player invitee = Server.playerDatabase.GetPlayerById(_fromClient);
+            Player inviter = Server.playerDatabase.GetPlayerByName(_packet.ReadString());
+            Lobby lobby = Server.lobbyDatabase.FindLobbyWithPlayer(inviter);
+            if(lobby != null && lobby.GetPlayers().Count < 3)
+            {
+                lobby.AddPlayer(invitee);
+                string playernames = String.Empty;
+                foreach(Player p in lobby.GetPlayers())
+                {
+                    playernames += p.username;
+                    playernames += ",";
+                }
+                foreach(Player p in lobby.GetPlayers())
+                {
+
+                    ServerSend.JoinedLobby(p.id, playernames);
+                }
+            }
+            else
+            {
+                ServerSend.CantJoinLobby(invitee.id, "Error, can't join the lobby");
+            }
+
+        }
+
+        public static void CreateLobby(int _fromClient, Packet _packet)
+        {
+            Player leader = Server.playerDatabase.GetPlayerById(_fromClient);
+            Server.lobbyDatabase.AddLobby(new Lobby(leader));
+            Console.WriteLine("Lobby created");
         }
     }
 }

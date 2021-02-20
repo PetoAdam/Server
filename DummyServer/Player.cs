@@ -1,6 +1,6 @@
 ﻿namespace DummyServer
 {
-    class Player
+    public class Player
     {
         public string username;
         public int password;
@@ -13,7 +13,12 @@
             password = _password;
         }
 
-        public void AssignId(int _id) { } // TODO
+        public Player(string _username, int _password, int _id)
+        {
+            username = _username;
+            password = _password;
+            id = _id;
+        }
 
         public void RemoveId() { } // TODO
     }

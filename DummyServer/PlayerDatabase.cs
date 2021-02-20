@@ -8,6 +8,7 @@ namespace DummyServer
     class PlayerDatabase
     {
         public List<Player> players = new List<Player>();
+        //private string path = @"C:\Users\Papp Pál\Documents\database.txt";
         private string path = @"E:\database.txt";
 
         public PlayerDatabase()
@@ -57,6 +58,32 @@ namespace DummyServer
                 sw.WriteLine(player.username + "," + player.password);
             }
             return true;
+        }
+
+        public Player GetPlayerById(int _id)
+        {
+            foreach(Player p in players)
+            {
+                if(p.id == _id)
+                {
+                    return p;
+                }
+            }
+
+            return null;
+        }
+
+        public Player GetPlayerByName(string _name)
+        {
+            foreach (Player p in players)
+            {
+                if (p.username == _name)
+                {
+                    return p;
+                }
+            }
+
+            return null;
         }
 
         public void Logout() { } // TODO

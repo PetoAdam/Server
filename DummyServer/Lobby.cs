@@ -7,7 +7,7 @@ namespace DummyServer
     public class Lobby
     {
         private List<Player> players = new List<Player>();
-        private Player leader;
+        public Player leader { get; set; }
 
         public Lobby (Player _leader)
         {
@@ -44,6 +44,22 @@ namespace DummyServer
             }
 
             return false;
+        }
+
+        public string GetLobbyData()
+        {
+            string playernames = String.Empty;
+            foreach (Player p in GetPlayers())
+            {
+                playernames += p.username;
+                if (p.username != GetPlayers()[GetPlayers().Count - 1].username)
+                {
+                    playernames += ",";
+                }
+            }
+            playernames += ";";
+            playernames += leader.username;
+            return playernames;
         }
     }
 }

@@ -11,7 +11,8 @@ namespace DummyServer
         login = 2,
         inviteToLobby = 3,
         joinedLobby = 4,
-        cantJoinLobby = 5
+        cantJoinLobby = 5,
+        leaveLobby = 6
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -20,7 +21,8 @@ namespace DummyServer
         welcomeReceived = 1,
         createLobby = 2,
         inviteToLobby = 3,
-        joinLobby = 4
+        joinLobby = 4,
+        leaveLobby = 5
     }
 
     public class Packet : IDisposable

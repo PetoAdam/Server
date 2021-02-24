@@ -76,20 +76,50 @@ namespace DummyServer
             ServerSend.InviteToLobby(invitee.id, inviter.username);
         }
 
+        internal static void LeaveLobby(int _fromClient, Packet _packet)
+        {
+            Player client = Server.playerDatabase.GetPlayerById(_fromClient);
+            Lobby lobby = Server.lobbyDatabase.FindLobbyWithPlayer(client);
+            if(lobby != null)
+            {
+                if(lobby.leader.username == client.username)
+                {
+                    foreach(Player p in lobby.GetPlayers())
+                    {
+                        if(p.username != client.username)
+                        {
+                            ServerSend.LeaveLobby(p.id, "The leader has left the lobby");
+                        }
+                    }
+                    Server.lobbyDatabase.RemoveLobby(lobby);
+                }
+                else
+                {
+                    Server.lobbyDatabase.FindLobbyWithPlayer(client).RemovePlayer(client);
+                    foreach (Player p in Server.lobbyDatabase.FindLobbyWithPlayer(client).GetPlayers())
+                    {
+                           ServerSend.LeaveLobby(p.id, Server.lobbyDatabase.FindLobbyWithPlayer(client).GetLobbyData());
+                    }
+                    
+                }
+            }
+        }
+
         public static void JoinLobby(int _fromClient, Packet _packet)
         {
             Player invitee = Server.playerDatabase.GetPlayerById(_fromClient);
             Player inviter = Server.playerDatabase.GetPlayerByName(_packet.ReadString());
             Lobby lobby = Server.lobbyDatabase.FindLobbyWithPlayer(inviter);
+            Lobby initialLobby = Server.lobbyDatabase.FindLobbyWithPlayer(invitee);
+            if (initialLobby != null)
+            {
+                LeaveLobby(_fromClient, _packet);
+            }
             if(lobby != null && lobby.GetPlayers().Count < 3)
             {
+                Console.WriteLine("Join successful");
                 lobby.AddPlayer(invitee);
-                string playernames = String.Empty;
-                foreach(Player p in lobby.GetPlayers())
-                {
-                    playernames += p.username;
-                    playernames += ",";
-                }
+                string playernames = lobby.GetLobbyData();
                 foreach(Player p in lobby.GetPlayers())
                 {
 
@@ -98,6 +128,7 @@ namespace DummyServer
             }
             else
             {
+                Console.WriteLine("Join unsuccessful");
                 ServerSend.CantJoinLobby(invitee.id, "Error, can't join the lobby");
             }
 

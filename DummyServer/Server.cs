@@ -63,8 +63,9 @@ namespace DummyServer
                 { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
                 { (int) ClientPackets.createLobby, ServerHandle.CreateLobby},
                 { (int)ClientPackets.inviteToLobby, ServerHandle.InviteToLobby },
-                { (int)ClientPackets.joinLobby, ServerHandle.JoinLobby }
-         
+                { (int)ClientPackets.joinLobby, ServerHandle.JoinLobby },
+                 { (int)ClientPackets.leaveLobby, ServerHandle.LeaveLobby }
+
             };
             Console.WriteLine("Initialized packets.");
 

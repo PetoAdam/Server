@@ -8,8 +8,8 @@ namespace DummyServer
     class PlayerDatabase
     {
         public List<Player> players = new List<Player>();
-        //private string path = @"C:\Users\Papp Pál\Documents\database.txt";
-        private string path = @"E:\database.txt";
+        private string path = @"C:\Users\Papp Pál\source\repos\Server\database2.txt";
+        //private string path = @"E:\database.txt";
 
         public PlayerDatabase()
         {

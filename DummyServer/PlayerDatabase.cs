@@ -8,8 +8,8 @@ namespace DummyServer
     class PlayerDatabase
     {
         public List<Player> players = new List<Player>();
-        private string path = @"C:\Users\Papp Pál\source\repos\Server\database2.txt";
-        //private string path = @"E:\database.txt";
+        //private string path = @"C:\Users\Papp Pál\source\repos\Server\database2.txt";
+        private string path = @"E:\database.txt";
 
         public PlayerDatabase()
         {
@@ -17,7 +17,7 @@ namespace DummyServer
             foreach(string line in lines)
             {
                 var listStrLineElements = line.Split(',');
-                players.Add(new Player(listStrLineElements[0], Int32.Parse(listStrLineElements[1])));
+                players.Add(new Player(){ username = listStrLineElements[0], password = Int32.Parse(listStrLineElements[1]), elo = Int32.Parse(listStrLineElements[2]) });
             }
         }
 
@@ -55,7 +55,7 @@ namespace DummyServer
             players.Add(player);
             using (StreamWriter sw = File.AppendText(path))
             {
-                sw.WriteLine(player.username + "," + player.password);
+                sw.WriteLine(player.username + "," + player.password + "," + player.elo /* <- 1000 */);
             }
             return true;
         }

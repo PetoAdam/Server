@@ -96,11 +96,11 @@ namespace DummyServer
                 else
                 {
                     Server.lobbyDatabase.FindLobbyWithPlayer(client).RemovePlayer(client);
-                    foreach (Player p in Server.lobbyDatabase.FindLobbyWithPlayer(client).GetPlayers())
+                    lobby.RemovePlayer(client);
+                    foreach (Player p in lobby.GetPlayers())
                     {
-                           ServerSend.LeaveLobby(p.id, Server.lobbyDatabase.FindLobbyWithPlayer(client).GetLobbyData());
+                          ServerSend.LeaveLobby(p.id, lobby.GetLobbyData());
                     }
-                    
                 }
             }
         }

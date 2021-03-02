@@ -6,6 +6,7 @@ namespace DummyServer
 {
     public class Lobby
     {
+
         private List<Player> players = new List<Player>();
         public Player leader { get; set; }
 
@@ -60,6 +61,16 @@ namespace DummyServer
             playernames += ";";
             playernames += leader.username;
             return playernames;
+        }
+
+        public int GetAverageElo()
+        {
+            int averageElo = 0;
+            foreach(Player p in GetPlayers())
+            {
+                averageElo += p.elo;
+            }
+            return averageElo / GetPlayers().Count;
         }
     }
 }

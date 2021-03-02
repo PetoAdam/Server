@@ -13,7 +13,7 @@ namespace DummyServer
         public int id;
         public TCP tcp;
         public string username;
-        public string password; //TODO hash?
+        public string password;
        
         public Client(int _clientId)
         {
@@ -130,6 +130,21 @@ namespace DummyServer
                 return false;
             }
 
+
+            public void Disconnect()
+            {
+                socket.Close();
+                stream = null;
+                receivedData = null;
+                receiveBuffer = null;
+                socket = null;
+            }
+        }
+
+        private void Disconnect()
+        {
+            Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
+            //TODO
         }
     }
 }

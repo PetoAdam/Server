@@ -17,6 +17,7 @@ namespace DummyServer
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
         public static Dictionary<int, PacketHandler> packetHandlers;
+        public static MatchDatabase matchDatabase;
         private static TcpListener tcpListener;
 
         public static void Start(int _maxPlayers, int _port)
@@ -76,6 +77,7 @@ namespace DummyServer
             playerDatabase = new PlayerDatabase();
             lobbyDatabase = new LobbyDatabase();
             matchmaking = new Matchmaking();
+            matchDatabase = new MatchDatabase();
             Thread newthread = new Thread(matchmaking.CallAfterDelay);
             newthread.Start();
 

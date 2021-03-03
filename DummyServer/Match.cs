@@ -9,6 +9,7 @@ namespace DummyServer
 
         public List<Lobby> team1 = new List<Lobby>();
         public List<Lobby> team2 = new List<Lobby>();
+        public Player host;
 
         public Match()
         {

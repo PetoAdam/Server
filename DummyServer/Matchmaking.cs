@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Net.NetworkInformation;
 
 namespace DummyServer
 {
@@ -77,13 +78,69 @@ namespace DummyServer
             Console.WriteLine("ideisbefut");
             foreach(Match m in matches)
             {
+                Match match = m;
+                Dictionary<Player, long> playerPings = new Dictionary<Player, long>();
+                Dictionary<Player, long> sortedPlayerPings = new Dictionary<Player, long>();
                 Console.WriteLine(m.team1[0].leader.username);
                 Console.WriteLine(m.team2[0].leader.username);
                 //TODO player spawning and stuff
-            }
+                foreach(Lobby lobby in m.team1)
+                {
+                    foreach(Player p in lobby.GetPlayers())
+                    {
+                        playerPings.Add(p, PingPlayer(p));
+                    }
+                }
+                foreach (Lobby lobby in m.team2)
+                {
+                    foreach (Player p in lobby.GetPlayers())
+                    {
+                        playerPings.Add(p, PingPlayer(p));
+                    }
+                }
+                foreach (KeyValuePair<Player, long> pair in playerPings.OrderBy(key => key.Value))
+                {
+                    sortedPlayerPings.Add(pair.Key, pair.Value);
+                }
+                match.host = sortedPlayerPings.ElementAt(0).Key;
+                Server.matchDatabase.matches.Add(match);
 
+                foreach (Lobby lobby in m.team1)
+                {
+                    foreach (Player p in lobby.GetPlayers())
+                    {
+                        ServerSend.StartMatch(p.id, match.host.username);
+                    }
+                }
+                foreach (Lobby lobby in m.team2)
+                {
+                    foreach (Player p in lobby.GetPlayers())
+                    {
+                        ServerSend.StartMatch(p.id, match.host.username);
+                    }
+                }
+
+            }
             matches.Clear();
         }
+
+
+        private long PingPlayer(Player p)
+        {
+            string remoteEndPoint = Server.clients[p.id].tcp.socket.Client.RemoteEndPoint.ToString();
+            string ipAddress = remoteEndPoint.Split(':')[0];
+            Ping sendPing = new Ping();
+            PingReply reply = sendPing.Send(ipAddress, 1000);
+            if (reply != null)
+            {
+               return reply.RoundtripTime;
+            }
+            else
+            {
+                return 100000;
+            }
+        }
+
 
         private void CreateMatch1(List<Lobby> orderedLobbies)
         {

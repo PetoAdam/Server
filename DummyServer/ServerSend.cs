@@ -111,5 +111,16 @@ namespace DummyServer
                 SendTCPData(_toClient, _packet);
             }
         }
+
+        public static void StartMatch(int _toClient, string _msg)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.startMatch))
+            {
+                _packet.Write(_msg);
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
     }
 }

@@ -30,8 +30,6 @@ namespace DummyServer
             {
                 Search();
                 Thread.Sleep(10000);
-                //Task.Delay(10000).ContinueWith(t => Search());
-
             }
         }
         
@@ -75,7 +73,6 @@ namespace DummyServer
 
         public void StartGames()
         {
-            Console.WriteLine("ideisbefut");
             foreach(Match m in matches)
             {
                 Match match = m;
@@ -109,14 +106,14 @@ namespace DummyServer
                 {
                     foreach (Player p in lobby.GetPlayers())
                     {
-                        ServerSend.StartMatch(p.id, match.host.username);
+                        ServerSend.StartMatch(p.id, match.host.username + ":0");
                     }
                 }
                 foreach (Lobby lobby in m.team2)
                 {
                     foreach (Player p in lobby.GetPlayers())
                     {
-                        ServerSend.StartMatch(p.id, match.host.username);
+                        ServerSend.StartMatch(p.id, match.host.username + ":1");
                     }
                 }
 

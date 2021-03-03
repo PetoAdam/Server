@@ -16,6 +16,21 @@ namespace DummyServer
 
         }
 
+        public bool IsPlayerInMatch(Player p)
+        {
+            foreach(Lobby l in team1)
+            {
+                if (l.IsPlayerInLobby(p))
+                    return true;
+            }
+            foreach (Lobby l in team2)
+            {
+                if (l.IsPlayerInLobby(p))
+                    return true;
+            }
+            return false;
+        }
+
         //Gives the max players to join one team -> max 3
         public int GetMaxFreePlaces()
         {

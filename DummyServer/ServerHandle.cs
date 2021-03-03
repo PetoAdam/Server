@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
+using System.Linq;
 
 namespace DummyServer
 {
@@ -153,5 +155,44 @@ namespace DummyServer
             Server.lobbyDatabase.AddLobby(new Lobby(leader));
             Console.WriteLine("Lobby created");
         }
+
+        public static void UDPTestReceive(int _fromClient, Packet _packet)
+        {
+            string _msg = _packet.ReadString();
+
+            Console.WriteLine(_msg);
+        }
+
+        public static void OnSendIntoGame(int _fromClient, Packet _packet)
+        {
+            Match m = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            List<Vector3> spawns = Constants.team1Spawns;
+
+            foreach(Lobby l in m.team1)
+            {
+                foreach(Player p in l.GetPlayers())
+                {
+                    int team = 0;
+                    int n = new Random().Next(0, spawns.Count - 1);
+                    Vector3 spawn = spawns[n];
+                    spawns.RemoveAt(n);
+                    ServerSend.SpawnPlayer(p.id, team, spawn);
+                }
+            }
+
+            spawns = Constants.team2Spawns;
+            foreach (Lobby l in m.team1)
+            {
+                foreach (Player p in l.GetPlayers())
+                {
+                    int team = 1;
+                    int n = new Random().Next(0, spawns.Count - 1);
+                    Vector3 spawn = spawns[n];
+                    spawns.RemoveAt(n);
+                    ServerSend.SpawnPlayer(p.id, team, spawn);
+                }
+            }
+        }
+
     }
 }

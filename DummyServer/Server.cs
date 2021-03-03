@@ -19,6 +19,7 @@ namespace DummyServer
         public static Dictionary<int, PacketHandler> packetHandlers;
         public static MatchDatabase matchDatabase;
         private static TcpListener tcpListener;
+        private static UdpClient udpListener;
 
         public static void Start(int _maxPlayers, int _port)
         {
@@ -31,6 +32,9 @@ namespace DummyServer
             tcpListener = new TcpListener(IPAddress.Any, Port);
             tcpListener.Start();
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
+
+            udpListener = new UdpClient(Port);
+            udpListener.BeginReceive(UDPReceiveCallback, null);
 
             Console.WriteLine($"Server started on {Port}.");
         }
@@ -54,6 +58,61 @@ namespace DummyServer
             Console.WriteLine($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
         }
 
+        private static void UDPReceiveCallback(IAsyncResult _result)
+        {
+            try
+            {
+                IPEndPoint _clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                byte[] _data = udpListener.EndReceive(_result, ref _clientEndPoint);
+                udpListener.BeginReceive(UDPReceiveCallback, null);
+
+                if(_data.Length < 4)
+                {
+                    return;
+                }
+
+                using (Packet _packet = new Packet(_data))
+                {
+                    int _clientId = _packet.ReadInt();
+
+                    if(_clientId == 0)
+                    {
+                        return;
+                    }
+
+                    if(clients[_clientId].udp.endPoint == null)
+                    {
+                        clients[_clientId].udp.Connect(_clientEndPoint);
+                        return;
+                    }
+
+                    if(clients[_clientId].udp.endPoint.ToString() == _clientEndPoint.ToString())
+                    {
+                        clients[_clientId].udp.HandleData(_packet);
+                    }
+                }
+            }
+            catch(Exception _ex)
+            {
+                Console.WriteLine($"Error receiving UDP data: {_ex}");
+            }
+        }
+
+        public static void SendUDPData(IPEndPoint _clientEndPoint, Packet _packet)
+        {
+            try
+            {
+                if(_clientEndPoint != null)
+                {
+                    udpListener.BeginSend(_packet.ToArray(), _packet.Length(), _clientEndPoint, null, null);
+                }
+            }
+            catch(Exception _ex)
+            {
+                Console.WriteLine($"Error sending data to {_clientEndPoint} via UDP: {_ex}");
+            }
+        }
+
         private static void InitializeServerData()
         {
             for (int i = 1; i <= MaxPlayers; i++)
@@ -67,8 +126,9 @@ namespace DummyServer
                 { (int) ClientPackets.createLobby, ServerHandle.CreateLobby},
                 { (int)ClientPackets.inviteToLobby, ServerHandle.InviteToLobby },
                 { (int)ClientPackets.joinLobby, ServerHandle.JoinLobby },
-                 { (int)ClientPackets.leaveLobby, ServerHandle.LeaveLobby },
-                 { (int)ClientPackets.searchingMatch, ServerHandle.SearchingMatch }
+                { (int)ClientPackets.leaveLobby, ServerHandle.LeaveLobby },
+                { (int)ClientPackets.searchingMatch, ServerHandle.SearchingMatch },
+                { (int)ClientPackets.udpTestReceive, ServerHandle.UDPTestReceive }
 
 
             };

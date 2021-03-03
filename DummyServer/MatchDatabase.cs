@@ -10,6 +10,16 @@ namespace DummyServer
     {
         public List<Match> matches = new List<Match>();
 
-
+        public Match GetMatchByPlayer(Player _player)
+        {
+            foreach(Match m in matches)
+            {
+                if (m.IsPlayerInMatch(_player))
+                {
+                    return m;
+                }
+            }
+            return null;
+        }
     }
 }

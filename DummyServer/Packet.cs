@@ -12,7 +12,9 @@ namespace DummyServer
         inviteToLobby = 3,
         joinedLobby = 4,
         cantJoinLobby = 5,
-        leaveLobby = 6
+        leaveLobby = 6,
+        searchingMatch = 7,
+        startMatch = 8
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -22,7 +24,8 @@ namespace DummyServer
         createLobby = 2,
         inviteToLobby = 3,
         joinLobby = 4,
-        leaveLobby = 5
+        leaveLobby = 5,
+        searchingMatch = 6
     }
 
     public class Packet : IDisposable

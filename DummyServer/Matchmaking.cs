@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace DummyServer
 {
@@ -16,13 +18,24 @@ namespace DummyServer
         threevoneoneone = 5,
         twoonevoneoneone = 6
     }
-    public static class Matchmaking
+    public class Matchmaking
     {
-        public static List<Lobby> lobbies;
-        public static List<Match> matches;
+        public  List<Lobby> lobbies = new List<Lobby>();
+        public  List<Match> matches = new List<Match>();
+
+        public  void CallAfterDelay()
+        {
+            while (true)
+            {
+                Search();
+                Thread.Sleep(10000);
+                //Task.Delay(10000).ContinueWith(t => Search());
+
+            }
+        }
         
 
-        public static void Search()
+        public void Search()
         {
             List<Lobby> orderedLobbies = lobbies.OrderByDescending(o => o.GetAverageElo()).ToList();
 
@@ -55,9 +68,24 @@ namespace DummyServer
 
                 orderedLobbies = lobbies.OrderByDescending(o => o.GetAverageElo()).ToList();
             }
+
+            StartGames();
         }
 
-        private static void CreateMatch1(List<Lobby> orderedLobbies)
+        public void StartGames()
+        {
+            Console.WriteLine("ideisbefut");
+            foreach(Match m in matches)
+            {
+                Console.WriteLine(m.team1[0].leader.username);
+                Console.WriteLine(m.team2[0].leader.username);
+                //TODO player spawning and stuff
+            }
+
+            matches.Clear();
+        }
+
+        private void CreateMatch1(List<Lobby> orderedLobbies)
         {
             Match match = new Match();
             int numOfThreePlayerLobbies = 0;
@@ -88,7 +116,7 @@ namespace DummyServer
             }
         }
 
-        private static void CreateMatch2(List<Lobby> orderedLobbies)
+        private void CreateMatch2(List<Lobby> orderedLobbies)
         {
             Match match = new Match();
             int numOfOnePlayerLobbies = 0;
@@ -121,7 +149,7 @@ namespace DummyServer
             }
         }
 
-        private static void CreateMatch3(List<Lobby> orderedLobbies)
+        private void CreateMatch3(List<Lobby> orderedLobbies)
         {
             Match match = new Match();
             int numOfThreePlayerLobbies = 0;
@@ -161,7 +189,7 @@ namespace DummyServer
             }
         }
 
-        private static void CreateMatch4(List<Lobby> orderedLobbies)
+        private void CreateMatch4(List<Lobby> orderedLobbies)
         {
             Match match = new Match();
             int numOfTwoPlayerLobbies = 0;
@@ -205,7 +233,7 @@ namespace DummyServer
             }
         }
 
-        private static void CreateMatch5(List<Lobby> orderedLobbies)
+        private void CreateMatch5(List<Lobby> orderedLobbies)
         {
             Match match = new Match();
             int numOfThreePlayerLobbies = 0;
@@ -235,7 +263,7 @@ namespace DummyServer
             }
         }
 
-        private static void CreateMatch6(List<Lobby> orderedLobbies)
+        private void CreateMatch6(List<Lobby> orderedLobbies)
         {
             Match match = new Match();
             int numOfTwoPlayerLobbies = 0;
@@ -272,45 +300,7 @@ namespace DummyServer
             }
         }
 
-        /*public static bool MatchCanBeMade(List<Lobby> orderedLobbies)
-        {
-            int onePersonLobbyCount = 0;
-            int twoPersonLobbyCount = 0;
-            int threePersonLobbyCount = 0;
-            foreach(Lobby l in orderedLobbies)
-            {
-                switch (l.GetPlayers().Count)
-                {
-                    case 1:
-                        onePersonLobbyCount++;
-                        break;
-                    case 2:
-                        twoPersonLobbyCount++;
-                        break;
-                    case 3:
-                        threePersonLobbyCount++;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if(threePersonLobbyCount >= 2)
-                return true;
-            if (onePersonLobbyCount >= 6)
-                return true;
-            if (threePersonLobbyCount >= 1 && twoPersonLobbyCount >= 1 && onePersonLobbyCount >= 1)
-                return true;
-            if (twoPersonLobbyCount >= 2 && onePersonLobbyCount >= 2)
-                return true;
-            if (threePersonLobbyCount >= 1 && onePersonLobbyCount >= 3)
-                return true;
-            if (twoPersonLobbyCount >= 1 && onePersonLobbyCount >= 4)
-                return true;
-            return false;
-        }*/
-
-        public static TypeOfMatch MatchCanBeMade(List<Lobby> orderedLobbies)
+        public TypeOfMatch MatchCanBeMade(List<Lobby> orderedLobbies)
         {
             int onePersonLobbyCount = 0;
             int twoPersonLobbyCount = 0;

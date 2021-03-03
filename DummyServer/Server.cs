@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace DummyServer
 {
@@ -11,6 +12,7 @@ namespace DummyServer
         public static int MaxPlayers { get; private set; }
         public static PlayerDatabase playerDatabase;
         public static LobbyDatabase lobbyDatabase;
+        public static Matchmaking matchmaking;
         public static int Port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
@@ -64,13 +66,20 @@ namespace DummyServer
                 { (int) ClientPackets.createLobby, ServerHandle.CreateLobby},
                 { (int)ClientPackets.inviteToLobby, ServerHandle.InviteToLobby },
                 { (int)ClientPackets.joinLobby, ServerHandle.JoinLobby },
-                 { (int)ClientPackets.leaveLobby, ServerHandle.LeaveLobby }
+                 { (int)ClientPackets.leaveLobby, ServerHandle.LeaveLobby },
+                 { (int)ClientPackets.searchingMatch, ServerHandle.SearchingMatch }
+
 
             };
             Console.WriteLine("Initialized packets.");
 
             playerDatabase = new PlayerDatabase();
             lobbyDatabase = new LobbyDatabase();
+            matchmaking = new Matchmaking();
+            Thread newthread = new Thread(matchmaking.CallAfterDelay);
+            newthread.Start();
+
+
         }
     }
 }

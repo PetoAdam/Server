@@ -76,6 +76,19 @@ namespace DummyServer
             ServerSend.InviteToLobby(invitee.id, inviter.username);
         }
 
+        public static void SearchingMatch(int _fromClient, Packet _packet)
+        {
+            Lobby lobby = Server.lobbyDatabase.FindLobbyWithPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            Server.matchmaking.lobbies.Add(lobby);
+            foreach(Player p in lobby.GetPlayers())
+            {
+                if(_fromClient != p.id)
+                {
+                    ServerSend.SearchingMatch(p.id, String.Empty);
+                }
+            }
+        }
+
         internal static void LeaveLobby(int _fromClient, Packet _packet)
         {
             Player client = Server.playerDatabase.GetPlayerById(_fromClient);

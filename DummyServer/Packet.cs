@@ -5,8 +5,6 @@ using System.Numerics;
 
 namespace DummyServer
 {
-    /// <summary>Sent from server to client.</summary>
-    /// <summary>Sent from server to client.</summary>
     public enum ServerPackets
     {
         welcome = 1,
@@ -21,6 +19,7 @@ namespace DummyServer
         spawnPlayer = 10,
         playerPosition = 11,
         playerRotation = 12,
+        sceneLoaded = 13
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -34,7 +33,8 @@ namespace DummyServer
         searchingMatch = 6,
         udpTestReceive = 7,
         playerMovement = 8,
-        sendIntoGame = 9
+        sendIntoGame = 9,
+        sceneLoaded = 10
     }
 
     public class Packet : IDisposable

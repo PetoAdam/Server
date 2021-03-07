@@ -161,12 +161,26 @@ namespace DummyServer
             }
         }
 
-        public static void SpawnPlayer(int _toClient, int _team, Vector3 _spawn)
+        public static void SpawnPlayer(int _toClient, List<SpawnInfo> info)
         {
             using (Packet _packet = new Packet((int)ServerPackets.spawnPlayer))
             {
-                _packet.Write(_team);
-                _packet.Write(_spawn);
+                foreach(SpawnInfo si in info)
+                {
+                    _packet.Write(si.username);
+                    _packet.Write(si.team);
+                    _packet.Write(si.spawn);
+                }
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void OnReadyButtonClicked(int _toClient)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.sceneLoaded))
+            {
                 _packet.Write(_toClient);
 
                 SendTCPData(_toClient, _packet);

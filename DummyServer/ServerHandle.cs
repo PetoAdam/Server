@@ -167,6 +167,7 @@ namespace DummyServer
         {
             Match m = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             List<Vector3> spawns = Constants.team1Spawns;
+            List<SpawnInfo> spawnInfo = new List<SpawnInfo>();
 
             foreach(Lobby l in m.team1)
             {
@@ -176,12 +177,12 @@ namespace DummyServer
                     int n = new Random().Next(0, spawns.Count - 1);
                     Vector3 spawn = spawns[n];
                     spawns.RemoveAt(n);
-                    ServerSend.SpawnPlayer(p.id, team, spawn);
+                    spawnInfo.Add(new SpawnInfo(spawn, team, p.username));
                 }
             }
 
             spawns = Constants.team2Spawns;
-            foreach (Lobby l in m.team1)
+            foreach (Lobby l in m.team2)
             {
                 foreach (Player p in l.GetPlayers())
                 {
@@ -189,10 +190,38 @@ namespace DummyServer
                     int n = new Random().Next(0, spawns.Count - 1);
                     Vector3 spawn = spawns[n];
                     spawns.RemoveAt(n);
-                    ServerSend.SpawnPlayer(p.id, team, spawn);
+                    spawnInfo.Add(new SpawnInfo(spawn, team, p.username));
                 }
             }
+
+            foreach (Lobby l in m.team1)
+            {
+                foreach (Player p in l.GetPlayers())
+                {
+                    ServerSend.SpawnPlayer(p.id, spawnInfo);
+                }
+            }
+
+   
+            foreach (Lobby l in m.team2)
+            {
+                foreach (Player p in l.GetPlayers())
+                {
+                    ServerSend.SpawnPlayer(p.id, spawnInfo);
+                }
+            }
+
+
+
+
         }
+
+        public static void OnReadyButtonClicked(int _fromClient, Packet _packet)
+        {
+            string hostname = _packet.ReadString();
+            ServerSend.OnReadyButtonClicked(Server.playerDatabase.GetPlayerByName(hostname).id);
+        }
+
 
     }
 }

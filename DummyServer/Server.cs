@@ -128,7 +128,9 @@ namespace DummyServer
                 { (int)ClientPackets.joinLobby, ServerHandle.JoinLobby },
                 { (int)ClientPackets.leaveLobby, ServerHandle.LeaveLobby },
                 { (int)ClientPackets.searchingMatch, ServerHandle.SearchingMatch },
-                { (int)ClientPackets.udpTestReceive, ServerHandle.UDPTestReceive }
+                { (int)ClientPackets.udpTestReceive, ServerHandle.UDPTestReceive },
+                { (int)ClientPackets.sceneLoaded, ServerHandle.OnReadyButtonClicked},
+                { (int)ClientPackets.sendIntoGame, ServerHandle.OnSendIntoGame}
 
 
             };

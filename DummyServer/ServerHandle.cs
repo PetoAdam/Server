@@ -16,14 +16,14 @@ namespace DummyServer
             int _loginMode = _packet.ReadInt();
 
             Console.WriteLine($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully and is now logging in as player {_fromClient} with username {_username} and password {_password}.");
-            if(_fromClient != _clientIdCheck)
+            if (_fromClient != _clientIdCheck)
             {
                 Console.WriteLine($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
                 return;
             }
 
             //TODO check username and password -- create and send packet - if login is unsuccessful dc after
-            if(_loginMode == 1)
+            if (_loginMode == 1)
             {
                 if (Server.playerDatabase.Login(new Player(_username, _password, _fromClient), _fromClient))
                 {
@@ -39,9 +39,9 @@ namespace DummyServer
                     ServerSend.Login(_fromClient, "Incorrect username or password.");
                 }
             }
-            if(_loginMode == 2)
+            if (_loginMode == 2)
             {
-                if(Server.playerDatabase.Register(new Player(_username, _password, _fromClient), _fromClient))
+                if (Server.playerDatabase.Register(new Player(_username, _password, _fromClient), _fromClient))
                 {
                     Console.WriteLine($"Player {_username} signed up and logged in.");
                     ServerSend.Login(_fromClient, "Success");
@@ -52,7 +52,7 @@ namespace DummyServer
                     ServerSend.Login(_fromClient, "Signup unsuccessful. Username already taken.");
                 }
             }
-            
+
 
             //TODO bind player to clientID
             //TODO: wait for player to start matchmaking then send player into game
@@ -62,13 +62,13 @@ namespace DummyServer
         {
             Player inviter = Server.playerDatabase.GetPlayerById(_fromClient);
             Player invitee = Server.playerDatabase.GetPlayerByName(_packet.ReadString());
-            if(invitee == null)
+            if (invitee == null)
             {
                 Console.WriteLine("No such player to invite");
                 //TODO send notification that no such player exist
                 return;
             }
-            if(!invitee.isLoggedIn)
+            if (!invitee.isLoggedIn)
             {
                 Console.WriteLine("Player not online or not given id");
                 //TODO send notification that player not online or not given id
@@ -82,9 +82,9 @@ namespace DummyServer
         {
             Lobby lobby = Server.lobbyDatabase.FindLobbyWithPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             Server.matchmaking.lobbies.Add(lobby);
-            foreach(Player p in lobby.GetPlayers())
+            foreach (Player p in lobby.GetPlayers())
             {
-                if(_fromClient != p.id)
+                if (_fromClient != p.id)
                 {
                     ServerSend.SearchingMatch(p.id, String.Empty);
                 }
@@ -95,13 +95,13 @@ namespace DummyServer
         {
             Player client = Server.playerDatabase.GetPlayerById(_fromClient);
             Lobby lobby = Server.lobbyDatabase.FindLobbyWithPlayer(client);
-            if(lobby != null)
+            if (lobby != null)
             {
-                if(lobby.leader.username == client.username)
+                if (lobby.leader.username == client.username)
                 {
-                    foreach(Player p in lobby.GetPlayers())
+                    foreach (Player p in lobby.GetPlayers())
                     {
-                        if(p.username != client.username)
+                        if (p.username != client.username)
                         {
                             ServerSend.LeaveLobby(p.id, "The leader has left the lobby");
                         }
@@ -114,7 +114,7 @@ namespace DummyServer
                     lobby.RemovePlayer(client);
                     foreach (Player p in lobby.GetPlayers())
                     {
-                          ServerSend.LeaveLobby(p.id, lobby.GetLobbyData());
+                        ServerSend.LeaveLobby(p.id, lobby.GetLobbyData());
                     }
                 }
             }
@@ -130,12 +130,12 @@ namespace DummyServer
             {
                 LeaveLobby(_fromClient, _packet);
             }
-            if(lobby != null && lobby.GetPlayers().Count < 3)
+            if (lobby != null && lobby.GetPlayers().Count < 3)
             {
                 Console.WriteLine("Join successful");
                 lobby.AddPlayer(invitee);
                 string playernames = lobby.GetLobbyData();
-                foreach(Player p in lobby.GetPlayers())
+                foreach (Player p in lobby.GetPlayers())
                 {
 
                     ServerSend.JoinedLobby(p.id, playernames);
@@ -169,9 +169,9 @@ namespace DummyServer
             List<Vector3> spawns = Constants.team1Spawns;
             List<SpawnInfo> spawnInfo = new List<SpawnInfo>();
 
-            foreach(Lobby l in m.team1)
+            foreach (Lobby l in m.team1)
             {
-                foreach(Player p in l.GetPlayers())
+                foreach (Player p in l.GetPlayers())
                 {
                     int team = 0;
                     int n = new Random().Next(0, spawns.Count - 1);
@@ -202,7 +202,7 @@ namespace DummyServer
                 }
             }
 
-   
+
             foreach (Lobby l in m.team2)
             {
                 foreach (Player p in l.GetPlayers())
@@ -210,10 +210,6 @@ namespace DummyServer
                     ServerSend.SpawnPlayer(p.id, spawnInfo);
                 }
             }
-
-
-
-
         }
 
         public static void OnReadyButtonClicked(int _fromClient, Packet _packet)
@@ -222,6 +218,40 @@ namespace DummyServer
             ServerSend.OnReadyButtonClicked(Server.playerDatabase.GetPlayerByName(hostname).id);
         }
 
+        public static void Searching1v1Match(int _fromClient, Packet _packet)
+        {
+            Server.matchmaking1v1.players.Add(Server.playerDatabase.GetPlayerById(_fromClient));
+        }
 
+        public static void OnReadyButtonClicked1v1(int _fromClient, Packet _packet)
+        {
+            string hostname = _packet.ReadString();
+            ServerSend.OnReadyButtonClicked1v1(Server.playerDatabase.GetPlayerByName(hostname).id);
+        }
+
+        public static void OnSendIntoGame1v1(int _fromClient, Packet _packet)
+        {
+            Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            List<Vector3> spawns = Constants.team1Spawns;
+            List<SpawnInfo> spawnInfo = new List<SpawnInfo>();
+
+            int team = 0;
+            int n = new Random().Next(0, spawns.Count - 1);
+            Vector3 spawn = spawns[n];
+            spawns.RemoveAt(n);
+            spawnInfo.Add(new SpawnInfo(spawn, team, m.player1.username));
+
+            spawns = Constants.team2Spawns;
+            team = 1;
+            n = new Random().Next(0, spawns.Count - 1);
+            spawn = spawns[n];
+            spawns.RemoveAt(n);
+            spawnInfo.Add(new SpawnInfo(spawn, team, m.player2.username));
+
+            ServerSend.SpawnPlayer1v1(m.player1.id, spawnInfo);
+
+            ServerSend.SpawnPlayer1v1(m.player2.id, spawnInfo);
+
+        }
     }
 }

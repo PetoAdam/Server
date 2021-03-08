@@ -13,11 +13,13 @@ namespace DummyServer
         public static PlayerDatabase playerDatabase;
         public static LobbyDatabase lobbyDatabase;
         public static Matchmaking matchmaking;
+        public static Matchmaking1v1 matchmaking1v1;
         public static int Port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
         public static Dictionary<int, PacketHandler> packetHandlers;
         public static MatchDatabase matchDatabase;
+        public static Match1v1Database match1v1Database;
         private static TcpListener tcpListener;
         private static UdpClient udpListener;
 
@@ -130,7 +132,10 @@ namespace DummyServer
                 { (int)ClientPackets.searchingMatch, ServerHandle.SearchingMatch },
                 { (int)ClientPackets.udpTestReceive, ServerHandle.UDPTestReceive },
                 { (int)ClientPackets.sceneLoaded, ServerHandle.OnReadyButtonClicked},
-                { (int)ClientPackets.sendIntoGame, ServerHandle.OnSendIntoGame}
+                { (int)ClientPackets.sendIntoGame, ServerHandle.OnSendIntoGame},
+                { (int)ClientPackets.searching1v1Match, ServerHandle.Searching1v1Match},
+                { (int)ClientPackets.sceneLoaded1v1, ServerHandle.OnReadyButtonClicked1v1},
+                { (int)ClientPackets.sendIntoGame1v1, ServerHandle.OnSendIntoGame1v1}
 
 
             };
@@ -139,9 +144,13 @@ namespace DummyServer
             playerDatabase = new PlayerDatabase();
             lobbyDatabase = new LobbyDatabase();
             matchmaking = new Matchmaking();
+            matchmaking1v1 = new Matchmaking1v1();
             matchDatabase = new MatchDatabase();
-            Thread newthread = new Thread(matchmaking.CallAfterDelay);
-            newthread.Start();
+            match1v1Database = new Match1v1Database();
+            Thread matchmakingThread = new Thread(matchmaking.CallAfterDelay);
+            matchmakingThread.Start();
+            Thread matchmaking1v1Thread = new Thread(matchmaking1v1.CallAfterDelay);
+            matchmaking1v1Thread.Start();
 
 
         }

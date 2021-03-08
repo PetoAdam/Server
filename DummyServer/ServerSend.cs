@@ -62,6 +62,17 @@ namespace DummyServer
             }
         }
 
+        public static void StartMatch1v1(int _toClient, string _msg)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.startMatch1v1))
+            {
+                _packet.Write(_msg);
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
         public static void Welcome(int _toClient, string _msg)
         {
             using (Packet _packet = new Packet((int)ServerPackets.welcome))
@@ -181,6 +192,32 @@ namespace DummyServer
         {
             using (Packet _packet = new Packet((int)ServerPackets.sceneLoaded))
             {
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void OnReadyButtonClicked1v1(int _toClient)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.sceneLoaded1v1))
+            {
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void SpawnPlayer1v1(int _toClient, List<SpawnInfo> info)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.spawnPlayer1v1))
+            {
+                foreach (SpawnInfo si in info)
+                {
+                    _packet.Write(si.username);
+                    _packet.Write(si.team);
+                    _packet.Write(si.spawn);
+                }
                 _packet.Write(_toClient);
 
                 SendTCPData(_toClient, _packet);

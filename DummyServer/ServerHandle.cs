@@ -165,6 +165,8 @@ namespace DummyServer
 
         public static void OnSendIntoGame(int _fromClient, Packet _packet)
         {
+            VaccineSpawn v = new VaccineSpawn();
+            SickSpawn s = new SickSpawn();
             Match m = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             List<Vector3> spawns = Constants.team1Spawns;
             List<SpawnInfo> spawnInfo = new List<SpawnInfo>();
@@ -198,7 +200,7 @@ namespace DummyServer
             {
                 foreach (Player p in l.GetPlayers())
                 {
-                    ServerSend.SpawnPlayer(p.id, spawnInfo);
+                    ServerSend.SpawnPlayer(p.id, spawnInfo, s, v);
                 }
             }
 
@@ -207,7 +209,7 @@ namespace DummyServer
             {
                 foreach (Player p in l.GetPlayers())
                 {
-                    ServerSend.SpawnPlayer(p.id, spawnInfo);
+                    ServerSend.SpawnPlayer(p.id, spawnInfo, s, v);
                 }
             }
         }
@@ -248,9 +250,12 @@ namespace DummyServer
             spawns.RemoveAt(n);
             spawnInfo.Add(new SpawnInfo(spawn, team, m.player2.username));
 
-            ServerSend.SpawnPlayer1v1(m.player1.id, spawnInfo);
+            VaccineSpawn v = new VaccineSpawn();
+            SickSpawn s = new SickSpawn();
 
-            ServerSend.SpawnPlayer1v1(m.player2.id, spawnInfo);
+            ServerSend.SpawnPlayer1v1(m.player1.id, spawnInfo, s, v);
+
+            ServerSend.SpawnPlayer1v1(m.player2.id, spawnInfo, s ,v);
 
         }
     }

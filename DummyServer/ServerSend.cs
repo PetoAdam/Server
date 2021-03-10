@@ -172,11 +172,14 @@ namespace DummyServer
             }
         }
 
-        public static void SpawnPlayer(int _toClient, List<SpawnInfo> info)
+        public static void SpawnPlayer(int _toClient, List<SpawnInfo> info, SickSpawn s, VaccineSpawn v)
         {
             using (Packet _packet = new Packet((int)ServerPackets.spawnPlayer))
             {
-                foreach(SpawnInfo si in info)
+                _packet.Write(v.finalPos);
+                _packet.Write(s.finalPos);
+                _packet.Write(s.finalRotation);
+                foreach (SpawnInfo si in info)
                 {
                     _packet.Write(si.username);
                     _packet.Write(si.team);
@@ -208,10 +211,13 @@ namespace DummyServer
             }
         }
 
-        public static void SpawnPlayer1v1(int _toClient, List<SpawnInfo> info)
+        public static void SpawnPlayer1v1(int _toClient, List<SpawnInfo> info, SickSpawn s, VaccineSpawn v)
         {
             using (Packet _packet = new Packet((int)ServerPackets.spawnPlayer1v1))
             {
+                _packet.Write(v.finalPos);
+                _packet.Write(s.finalPos);
+                _packet.Write(s.finalRotation);
                 foreach (SpawnInfo si in info)
                 {
                     _packet.Write(si.username);

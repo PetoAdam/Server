@@ -229,5 +229,15 @@ namespace DummyServer
                 SendTCPData(_toClient, _packet);
             }
         }
+
+        public static void OnPlayerMovement(int id, Packet packet)
+        {
+            SendUDPData(id, packet);
+        }
+
+        public static void OnPlayerMovementResponse(int id, Packet packet)
+        {
+            SendUDPData(id, packet);
+        }
     }
 }

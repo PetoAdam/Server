@@ -135,7 +135,9 @@ namespace DummyServer
                 { (int)ClientPackets.sendIntoGame, ServerHandle.OnSendIntoGame},
                 { (int)ClientPackets.searching1v1Match, ServerHandle.Searching1v1Match},
                 { (int)ClientPackets.sceneLoaded1v1, ServerHandle.OnReadyButtonClicked1v1},
-                { (int)ClientPackets.sendIntoGame1v1, ServerHandle.OnSendIntoGame1v1}
+                { (int)ClientPackets.sendIntoGame1v1, ServerHandle.OnSendIntoGame1v1},
+                { (int)ClientPackets.playerMovement, ServerHandle.OnPlayerMovement},
+                { (int)ClientPackets.onPlayerMovementResponse, ServerHandle.OnPlayerMovementResponse},
 
 
             };

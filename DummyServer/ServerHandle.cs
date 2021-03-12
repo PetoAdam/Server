@@ -149,6 +149,53 @@ namespace DummyServer
 
         }
 
+        public static void OnPlayerMovement(int _fromClient, Packet _packet)
+        {
+            Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if(m != null)
+            {
+                ServerSend.OnPlayerMovement(m.host.id, _packet);
+            }
+
+            Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if (m2 != null)
+            {
+                ServerSend.OnPlayerMovement(m2.host.id, _packet);
+            }
+
+        }
+
+        public static void OnPlayerMovementResponse(int _fromClient, Packet _packet)
+        {
+            Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if (m != null)
+            {
+                ServerSend.OnPlayerMovementResponse(m.player1.id, _packet);
+                ServerSend.OnPlayerMovementResponse(m.player2.id, _packet);
+            }
+
+            Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if (m2 != null)
+            {
+                foreach (Lobby l in m2.team1)
+                {
+                    foreach(Player p in l.GetPlayers())
+                    {
+                        ServerSend.OnPlayerMovementResponse(p.id, _packet);
+                    }
+                }
+
+                foreach (Lobby l in m2.team2)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        ServerSend.OnPlayerMovementResponse(p.id, _packet);
+                    }
+                }
+            }
+
+        }
+
         public static void CreateLobby(int _fromClient, Packet _packet)
         {
             Player leader = Server.playerDatabase.GetPlayerById(_fromClient);

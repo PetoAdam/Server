@@ -24,7 +24,8 @@ namespace DummyServer
         startMatch1v1 = 14,
         sceneLoaded1v1 = 15,
         spawnPlayer1v1 = 16,
-        playerMovement = 17
+        playerMovement = 17,
+        onPlayerMovementResponse = 18
     }
 
     /// <summary>Sent from client to server.</summary>

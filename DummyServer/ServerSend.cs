@@ -230,14 +230,31 @@ namespace DummyServer
             }
         }
 
-        public static void OnPlayerMovement(int id, Packet packet)
+        public static void OnPlayerMovement(int id, bool[] _inputs, Quaternion rotation, string username)
         {
-            SendUDPData(id, packet);
+            using (Packet _packet = new Packet((int)ServerPackets.playerMovement))
+            {
+                _packet.Write(_inputs.Length);
+                foreach (bool _input in _inputs)
+                {
+                    _packet.Write(_input);
+                }
+                _packet.Write(rotation);
+                _packet.Write(username);
+                SendUDPData(id, _packet);
+            }
+           
         }
 
-        public static void OnPlayerMovementResponse(int id, Packet packet)
+        public static void OnPlayerMovementResponse(int id, string username, Vector3 position, Quaternion rotation)
         {
-            SendUDPData(id, packet);
+            using (Packet _packet = new Packet((int)ServerPackets.onPlayerMovementResponse))
+            {
+                _packet.Write(username);
+                _packet.Write(position);
+                _packet.Write(rotation);
+                SendUDPData(id, _packet);
+            }
         }
     }
 }

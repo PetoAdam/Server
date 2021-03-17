@@ -151,27 +151,37 @@ namespace DummyServer
 
         public static void OnPlayerMovement(int _fromClient, Packet _packet)
         {
+            bool[] _inputs = new bool[_packet.ReadInt()];
+            for (int i = 0; i < _inputs.Length; i++)
+            {
+                _inputs[i] = _packet.ReadBool();
+            }
+            Quaternion _rotation = _packet.ReadQuaternion();
+            string _username = _packet.ReadString();
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if(m != null)
             {
-                ServerSend.OnPlayerMovement(m.host.id, _packet);
+                ServerSend.OnPlayerMovement(m.host.id, _inputs, _rotation, _username);
             }
 
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m2 != null)
             {
-                ServerSend.OnPlayerMovement(m2.host.id, _packet);
+                ServerSend.OnPlayerMovement(m.host.id, _inputs, _rotation, _username);
             }
 
         }
 
         public static void OnPlayerMovementResponse(int _fromClient, Packet _packet)
         {
+            string username = _packet.ReadString();
+            Vector3 position = _packet.ReadVector3();
+            Quaternion rotation = _packet.ReadQuaternion();
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m != null)
             {
-                ServerSend.OnPlayerMovementResponse(m.player1.id, _packet);
-                ServerSend.OnPlayerMovementResponse(m.player2.id, _packet);
+                ServerSend.OnPlayerMovementResponse(m.player1.id, username, position, rotation);
+                ServerSend.OnPlayerMovementResponse(m.player2.id, username, position, rotation);
             }
 
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
@@ -181,7 +191,7 @@ namespace DummyServer
                 {
                     foreach(Player p in l.GetPlayers())
                     {
-                        ServerSend.OnPlayerMovementResponse(p.id, _packet);
+                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation);
                     }
                 }
 
@@ -189,7 +199,7 @@ namespace DummyServer
                 {
                     foreach (Player p in l.GetPlayers())
                     {
-                        ServerSend.OnPlayerMovementResponse(p.id, _packet);
+                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation);
                     }
                 }
             }

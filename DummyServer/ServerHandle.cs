@@ -167,7 +167,7 @@ namespace DummyServer
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m2 != null)
             {
-                ServerSend.OnPlayerMovement(m.host.id, _inputs, _rotation, _username);
+                ServerSend.OnPlayerMovement(m2.host.id, _inputs, _rotation, _username);
             }
 
         }

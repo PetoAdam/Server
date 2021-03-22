@@ -159,17 +159,16 @@ namespace DummyServer
             Quaternion _rotation = _packet.ReadQuaternion();
             string _username = _packet.ReadString();
             float _xRot = _packet.ReadFloat();
-            float _yRot = _packet.ReadFloat();
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if(m != null)
             {
-                ServerSend.OnPlayerMovement(m.host.id, _inputs, _rotation, _username, _xRot, _yRot);
+                ServerSend.OnPlayerMovement(m.host.id, _inputs, _rotation, _username, _xRot);
             }
 
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m2 != null)
             {
-                ServerSend.OnPlayerMovement(m2.host.id, _inputs, _rotation, _username, _xRot, _yRot);
+                ServerSend.OnPlayerMovement(m2.host.id, _inputs, _rotation, _username, _xRot);
             }
 
         }

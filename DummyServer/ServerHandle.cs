@@ -179,11 +179,12 @@ namespace DummyServer
             Vector3 position = _packet.ReadVector3();
             Quaternion rotation = _packet.ReadQuaternion();
             float xRot = _packet.ReadFloat();
+            int state = _packet.ReadInt();
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m != null)
             {
-                ServerSend.OnPlayerMovementResponse(m.player1.id, username, position, rotation, xRot);
-                ServerSend.OnPlayerMovementResponse(m.player2.id, username, position, rotation, xRot);
+                ServerSend.OnPlayerMovementResponse(m.player1.id, username, position, rotation, xRot, state);
+                ServerSend.OnPlayerMovementResponse(m.player2.id, username, position, rotation, xRot, state);
             }
 
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
@@ -193,7 +194,7 @@ namespace DummyServer
                 {
                     foreach(Player p in l.GetPlayers())
                     {
-                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot);
+                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state);
                     }
                 }
 
@@ -201,7 +202,7 @@ namespace DummyServer
                 {
                     foreach (Player p in l.GetPlayers())
                     {
-                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot);
+                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state);
                     }
                 }
             }

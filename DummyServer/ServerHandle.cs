@@ -149,6 +149,49 @@ namespace DummyServer
 
         }
 
+        public static void OnShooting(int _fromClient, Packet _packet)
+        {
+            string hitUsername = String.Empty;
+            float health = 0;
+            Vector3 point = _packet.ReadVector3();
+            Vector3 normal = _packet.ReadVector3();
+            string username = _packet.ReadString();
+            int ammoCount = _packet.ReadInt();
+            bool isTargetHit = _packet.ReadBool();
+            if (isTargetHit)
+            {
+                hitUsername = _packet.ReadString();
+                health = _packet.ReadFloat();
+            }
+
+            Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if (m != null)
+            {
+                ServerSend.OnShooting(m.player1.id, point, normal, username, ammoCount, isTargetHit, hitUsername, health);
+                ServerSend.OnShooting(m.player2.id, point, normal, username, ammoCount, isTargetHit, hitUsername, health);
+            }
+
+            Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if (m2 != null)
+            {
+                foreach (Lobby l in m2.team1)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        ServerSend.OnShooting(p.id, point, normal, username, ammoCount, isTargetHit, hitUsername, health);
+                    }
+                }
+
+                foreach (Lobby l in m2.team2)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        ServerSend.OnShooting(p.id, point, normal, username, ammoCount, isTargetHit, hitUsername, health);
+                    }
+                }
+            }
+        }
+
         public static void OnPlayerMovement(int _fromClient, Packet _packet)
         {
             bool[] _inputs = new bool[_packet.ReadInt()];

@@ -247,6 +247,24 @@ namespace DummyServer
            
         }
 
+        public static void OnShooting(int id, Vector3 point, Vector3 normal, string username, int ammoCount, bool isTargetHit, string hitUsername, float health)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.shooting))
+            {
+                _packet.Write(point);
+                _packet.Write(normal);
+                _packet.Write(username);
+                _packet.Write(ammoCount);
+                _packet.Write(isTargetHit);
+                if (isTargetHit)
+                {
+                    _packet.Write(hitUsername);
+                    _packet.Write(health);
+                }
+                SendUDPData(id, _packet);
+            }
+        }
+
         public static void OnPlayerMovementResponse(int id, string username, Vector3 position, Quaternion rotation, float xRot, int state, bool isSprinting)
         {
             using (Packet _packet = new Packet((int)ServerPackets.onPlayerMovementResponse))

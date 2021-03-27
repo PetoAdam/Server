@@ -138,6 +138,7 @@ namespace DummyServer
                 { (int)ClientPackets.sendIntoGame1v1, ServerHandle.OnSendIntoGame1v1},
                 { (int)ClientPackets.playerMovement, ServerHandle.OnPlayerMovement},
                 { (int)ClientPackets.onPlayerMovementResponse, ServerHandle.OnPlayerMovementResponse},
+                { (int)ClientPackets.shooting, ServerHandle.OnShooting},
 
 
             };

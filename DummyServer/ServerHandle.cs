@@ -202,16 +202,18 @@ namespace DummyServer
             Quaternion _rotation = _packet.ReadQuaternion();
             string _username = _packet.ReadString();
             float _xRot = _packet.ReadFloat();
+            Vector3 _camPos = _packet.ReadVector3();
+            Vector3 _camForward = _packet.ReadVector3();
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if(m != null)
             {
-                ServerSend.OnPlayerMovement(m.host.id, _inputs, _rotation, _username, _xRot);
+                ServerSend.OnPlayerMovement(m.host.id, _inputs, _rotation, _username, _xRot, _camPos, _camForward);
             }
 
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m2 != null)
             {
-                ServerSend.OnPlayerMovement(m2.host.id, _inputs, _rotation, _username, _xRot);
+                ServerSend.OnPlayerMovement(m2.host.id, _inputs, _rotation, _username, _xRot, _camPos, _camForward);
             }
 
         }

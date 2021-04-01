@@ -249,14 +249,13 @@ namespace DummyServer
            
         }
 
-        public static void OnShooting(int id, Vector3 point, Vector3 normal, string username, int ammoCount, bool isTargetHit, string hitUsername, float health)
+        public static void OnShooting(int id, Vector3 point, Vector3 normal, string username, bool isTargetHit, string hitUsername, float health)
         {
             using (Packet _packet = new Packet((int)ServerPackets.shooting))
             {
                 _packet.Write(point);
                 _packet.Write(normal);
                 _packet.Write(username);
-                _packet.Write(ammoCount);
                 _packet.Write(isTargetHit);
                 if (isTargetHit)
                 {

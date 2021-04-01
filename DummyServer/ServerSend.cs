@@ -230,7 +230,7 @@ namespace DummyServer
             }
         }
 
-        public static void OnPlayerMovement(int id, bool[] _inputs, Quaternion rotation, string username, float _xRot, Vector3 _camForward)
+        public static void OnPlayerMovement(int id, bool[] _inputs, Quaternion rotation, string username, float _xRot, Vector3 _camPos, Vector3 _camForward)
         {
             using (Packet _packet = new Packet((int)ServerPackets.playerMovement))
             {
@@ -242,6 +242,7 @@ namespace DummyServer
                 _packet.Write(rotation);
                 _packet.Write(username);
                 _packet.Write(_xRot);
+                _packet.Write(_camPos);
                 _packet.Write(_camForward);
                 SendUDPData(id, _packet);
             }

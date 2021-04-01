@@ -156,6 +156,7 @@ namespace DummyServer
             Vector3 point = _packet.ReadVector3();
             Vector3 normal = _packet.ReadVector3();
             string username = _packet.ReadString();
+            int ammoCount = _packet.ReadInt();
             bool isTargetHit = _packet.ReadBool();
             if (isTargetHit)
             {
@@ -166,8 +167,8 @@ namespace DummyServer
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m != null)
             {
-                ServerSend.OnShooting(m.player1.id, point, normal, username, isTargetHit, hitUsername, health);
-                ServerSend.OnShooting(m.player2.id, point, normal, username, isTargetHit, hitUsername, health);
+                ServerSend.OnShooting(m.player1.id, point, normal, username, ammoCount, isTargetHit, hitUsername, health);
+                ServerSend.OnShooting(m.player2.id, point, normal, username, ammoCount, isTargetHit, hitUsername, health);
             }
 
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
@@ -177,7 +178,7 @@ namespace DummyServer
                 {
                     foreach (Player p in l.GetPlayers())
                     {
-                        ServerSend.OnShooting(p.id, point, normal, username, isTargetHit, hitUsername, health);
+                        ServerSend.OnShooting(p.id, point, normal, username, ammoCount, isTargetHit, hitUsername, health);
                     }
                 }
 
@@ -185,7 +186,7 @@ namespace DummyServer
                 {
                     foreach (Player p in l.GetPlayers())
                     {
-                        ServerSend.OnShooting(p.id, point, normal, username, isTargetHit, hitUsername, health);
+                        ServerSend.OnShooting(p.id, point, normal, username, ammoCount, isTargetHit, hitUsername, health);
                     }
                 }
             }
@@ -224,12 +225,11 @@ namespace DummyServer
             float xRot = _packet.ReadFloat();
             int state = _packet.ReadInt();
             bool isSprinting = _packet.ReadBool();
-            int ammoCount = _packet.ReadInt();
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m != null)
             {
-                ServerSend.OnPlayerMovementResponse(m.player1.id, username, position, rotation, xRot, state, isSprinting, ammoCount);
-                ServerSend.OnPlayerMovementResponse(m.player2.id, username, position, rotation, xRot, state, isSprinting, ammoCount);
+                ServerSend.OnPlayerMovementResponse(m.player1.id, username, position, rotation, xRot, state, isSprinting);
+                ServerSend.OnPlayerMovementResponse(m.player2.id, username, position, rotation, xRot, state, isSprinting);
             }
 
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
@@ -239,7 +239,7 @@ namespace DummyServer
                 {
                     foreach(Player p in l.GetPlayers())
                     {
-                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state, isSprinting, ammoCount);
+                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state, isSprinting);
                     }
                 }
 
@@ -247,7 +247,7 @@ namespace DummyServer
                 {
                     foreach (Player p in l.GetPlayers())
                     {
-                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state, isSprinting, ammoCount);
+                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state, isSprinting);
                     }
                 }
             }

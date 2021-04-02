@@ -266,7 +266,7 @@ namespace DummyServer
             }
         }
 
-        public static void OnPlayerMovementResponse(int id, string username, Vector3 position, Quaternion rotation, float xRot, int state, bool isSprinting, int ammoCount)
+        public static void OnPlayerMovementResponse(int id, string username, Vector3 position, Quaternion rotation, float xRot, int state, bool isSprinting, int ammoCount, int pressEText, bool startTimer, int invokeFunctionId)
         {
             using (Packet _packet = new Packet((int)ServerPackets.onPlayerMovementResponse))
             {
@@ -277,6 +277,9 @@ namespace DummyServer
                 _packet.Write(state);
                 _packet.Write(isSprinting);
                 _packet.Write(ammoCount);
+                _packet.Write(pressEText);
+                _packet.Write(startTimer);
+                _packet.Write(invokeFunctionId);
                 SendUDPData(id, _packet);
             }
         }

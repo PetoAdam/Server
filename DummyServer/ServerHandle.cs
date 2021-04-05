@@ -229,11 +229,12 @@ namespace DummyServer
             int pressEText = _packet.ReadInt();
             bool startTimer = _packet.ReadBool();
             int invokeFunctionId = _packet.ReadInt();
+            float timeRemaining = _packet.ReadFloat();
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m != null)
             {
-                ServerSend.OnPlayerMovementResponse(m.player1.id, username, position, rotation, xRot, state, isSprinting, ammoCount, pressEText, startTimer, invokeFunctionId);
-                ServerSend.OnPlayerMovementResponse(m.player2.id, username, position, rotation, xRot, state, isSprinting, ammoCount, pressEText, startTimer, invokeFunctionId);
+                ServerSend.OnPlayerMovementResponse(m.player1.id, username, position, rotation, xRot, state, isSprinting, ammoCount, pressEText, startTimer, invokeFunctionId, timeRemaining);
+                ServerSend.OnPlayerMovementResponse(m.player2.id, username, position, rotation, xRot, state, isSprinting, ammoCount, pressEText, startTimer, invokeFunctionId, timeRemaining);
             }
 
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
@@ -243,7 +244,7 @@ namespace DummyServer
                 {
                     foreach(Player p in l.GetPlayers())
                     {
-                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state, isSprinting, ammoCount, pressEText, startTimer, invokeFunctionId);
+                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state, isSprinting, ammoCount, pressEText, startTimer, invokeFunctionId, timeRemaining);
                     }
                 }
 
@@ -251,7 +252,7 @@ namespace DummyServer
                 {
                     foreach (Player p in l.GetPlayers())
                     {
-                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state, isSprinting, ammoCount, pressEText, startTimer, invokeFunctionId);
+                        ServerSend.OnPlayerMovementResponse(p.id, username, position, rotation, xRot, state, isSprinting, ammoCount, pressEText, startTimer, invokeFunctionId, timeRemaining);
                     }
                 }
             }

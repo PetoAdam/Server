@@ -149,6 +149,46 @@ namespace DummyServer
 
         }
 
+        public static void OnDying(int _fromClient, Packet _packet)
+        {
+            string username = _packet.ReadString();
+            bool hasVaccine = _packet.ReadBool();
+            Vector3 position = Vector3.Zero;
+            if (hasVaccine)
+            {
+                position = _packet.ReadVector3();
+            }
+
+            Match1v1 m = Server.match1v1Database.GetMatchByUsername(username);
+            Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if(m != null)
+            {
+                ServerSend.OnDying(m.player1.id, username, hasVaccine, position);
+                ServerSend.OnDying(m.player2.id, username, hasVaccine, position);
+            }
+            else if (m2 != null)
+            {
+                foreach (Lobby l in m2.team1)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        ServerSend.OnDying(p.id, username, hasVaccine, position);
+                    }
+                }
+
+                foreach (Lobby l in m2.team2)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        ServerSend.OnDying(p.id, username, hasVaccine, position);
+                    }
+                }
+            }
+
+
+
+        }
+
         public static void OnShooting(int _fromClient, Packet _packet)
         {
             string hitUsername = String.Empty;

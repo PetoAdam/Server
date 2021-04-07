@@ -230,6 +230,20 @@ namespace DummyServer
             }
         }
 
+        public static void OnDying(int id, string username, bool hasVaccine, Vector3 position)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.onDying))
+            {
+                _packet.Write(username);
+                _packet.Write(hasVaccine);
+                if (hasVaccine)
+                {
+                    _packet.Write(position);
+                }
+                SendUDPData(id, _packet);
+            }
+        }
+
         public static void OnPlayerMovement(int id, bool[] _inputs, Quaternion rotation, string username, float _xRot, Vector3 _camPos, Vector3 _camForward)
         {
             using (Packet _packet = new Packet((int)ServerPackets.playerMovement))

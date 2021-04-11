@@ -178,6 +178,7 @@ namespace DummyServer
                         ServerSend.OnRoundEnd(p.id, team0wins, team1wins);
                     }
                 }
+            }
         }
 
         public static void OnDying(int _fromClient, Packet _packet)

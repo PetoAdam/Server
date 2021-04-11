@@ -141,6 +141,7 @@ namespace DummyServer
                 { (int)ClientPackets.shooting, ServerHandle.OnShooting},
                 { (int)ClientPackets.onDying, ServerHandle.OnDying},
                 { (int)ClientPackets.onRoundEnd, ServerHandle.OnRoundEnd},
+                { (int)ClientPackets.onNextRound, ServerHandle.OnNextRound},
 
 
             };

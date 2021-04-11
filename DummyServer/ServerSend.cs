@@ -211,6 +211,14 @@ namespace DummyServer
             }
         }
 
+        public static void OnNextRound(int _toClient)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.onNextRound))
+            {
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
         public static void OnRoundEnd(int _toClient, int team0wins, int team1wins)
         {
             using (Packet _packet = new Packet((int)ServerPackets.onRoundEnd))

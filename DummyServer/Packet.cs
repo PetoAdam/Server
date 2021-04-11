@@ -28,7 +28,8 @@ namespace DummyServer
         onPlayerMovementResponse = 18,
         shooting = 19,
         onDying = 20,
-        onRoundEnd = 21
+        onRoundEnd = 21,
+        onNextRound = 22,
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -50,7 +51,8 @@ namespace DummyServer
         onPlayerMovementResponse = 14,
         shooting = 15,
         onDying = 16,
-        onRoundEnd = 17
+        onRoundEnd = 17,
+        onNextRound = 18
     }
 
     public class Packet : IDisposable

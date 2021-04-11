@@ -140,6 +140,7 @@ namespace DummyServer
                 { (int)ClientPackets.onPlayerMovementResponse, ServerHandle.OnPlayerMovementResponse},
                 { (int)ClientPackets.shooting, ServerHandle.OnShooting},
                 { (int)ClientPackets.onDying, ServerHandle.OnDying},
+                { (int)ClientPackets.onRoundEnd, ServerHandle.OnRoundEnd},
 
 
             };

@@ -149,6 +149,37 @@ namespace DummyServer
 
         }
 
+        public static void OnRoundEnd(int _fromClient, Packet _packet)
+        {
+            int team0wins = _packet.ReadInt();
+            int team1wins = _packet.ReadInt();
+
+            Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if (m != null)
+            {
+                ServerSend.OnRoundEnd(m.player1.id, team0wins, team1wins);
+                ServerSend.OnRoundEnd(m.player2.id, team0wins, team1wins);
+            }
+            else if (m2 != null)
+            {
+                foreach (Lobby l in m2.team1)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        ServerSend.OnRoundEnd(p.id, team0wins, team1wins);
+                    }
+                }
+
+                foreach (Lobby l in m2.team2)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        ServerSend.OnRoundEnd(p.id, team0wins, team1wins);
+                    }
+                }
+        }
+
         public static void OnDying(int _fromClient, Packet _packet)
         {
             string username = _packet.ReadString();

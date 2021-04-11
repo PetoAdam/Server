@@ -211,6 +211,16 @@ namespace DummyServer
             }
         }
 
+        public static void OnRoundEnd(int _toClient, int team0wins, int team1wins)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.onRoundEnd))
+            {
+                _packet.Write(team0wins);
+                _packet.Write(team1wins);
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
         public static void SpawnPlayer1v1(int _toClient, List<SpawnInfo> info, SickSpawn s, VaccineSpawn v)
         {
             using (Packet _packet = new Packet((int)ServerPackets.spawnPlayer1v1))

@@ -163,6 +163,7 @@ namespace DummyServer
                 m.player2.elo = newElos[1];
                 ServerSend.SendEndOfGame(m.player1.id, team0wins, team1wins, m.player1.elo);
                 ServerSend.SendEndOfGame(m.player1.id, team0wins, team1wins, m.player1.elo);
+                Server.match1v1Database.matches.Remove(m);
             }
             else if(m2 != null)
             {
@@ -179,6 +180,7 @@ namespace DummyServer
                     p.elo += newElos[1] - (int)team1average;
                     ServerSend.SendEndOfGame(p.id, team0wins, team1wins, p.elo);
                 }
+                Server.matchDatabase.matches.Remove(m2);
             }
 
         }

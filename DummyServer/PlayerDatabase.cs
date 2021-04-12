@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DummyServer
 {
-    class PlayerDatabase
+    public class PlayerDatabase
     {
         public List<Player> players = new List<Player>();
         //private string path = @"C:\Users\Papp Pál\source\repos\Server\database2.txt";
@@ -19,6 +19,18 @@ namespace DummyServer
             {
                 var listStrLineElements = line.Split(',');
                 players.Add(new Player(){ username = listStrLineElements[0], password = Int32.Parse(listStrLineElements[1]), elo = Int32.Parse(listStrLineElements[2]) });
+            }
+        }
+
+        public void SavePlayers()
+        {
+            File.WriteAllText(path, String.Empty);
+            foreach (Player player in players)
+            {
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine(player.username + "," + player.password + "," + player.elo);
+                }
             }
         }
 

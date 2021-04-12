@@ -232,6 +232,17 @@ namespace DummyServer
             }
         }
 
+        internal static void SendEndOfGame(int id, int team0wins, int team1wins, int elo)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.endOfGame))
+            {
+                _packet.Write(team0wins);
+                _packet.Write(team1wins);
+                _packet.Write(elo);
+                SendTCPData(id, _packet);
+            }
+        }
+
         public static void SpawnPlayer1v1(int _toClient, List<SpawnInfo> info, SickSpawn s, VaccineSpawn v)
         {
             using (Packet _packet = new Packet((int)ServerPackets.spawnPlayer1v1))

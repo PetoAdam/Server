@@ -21,9 +21,10 @@ namespace DummyServer
         // K is a constant. 
         // d determines whether Player A wins or 
         // Player B.  
-        static void CalculateEloRating(float Ra, float Rb,
-                                    int K, bool d)
+        public static List<int> CalculateEloRating(float Ra, float Rb, bool d,
+            int K = 16)
         {
+            List<int> result = new List<int>();
 
             // To calculate the Winning 
             // Probability of Player B 
@@ -49,12 +50,11 @@ namespace DummyServer
                 Rb = Rb + K * (1 - Pb);
             }
 
-            Console.Write("Updated Ratings:-\n");
+            result.Add((int)Ra);
+            result.Add((int)Rb);
 
-            Console.Write("Ra = " + (Math.Round(Ra
-                         * 1000000.0) / 1000000.0)
-                        + " Rb = " + Math.Round(Rb
-                         * 1000000.0) / 1000000.0);
+            return result;
+            
         }
     }
 }

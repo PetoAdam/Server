@@ -9,6 +9,7 @@ namespace DummyServer
         private static bool isRunning = false;
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
             Console.Title = "Game Server";
             isRunning = true;
 
@@ -16,6 +17,12 @@ namespace DummyServer
             mainThread.Start();
 
             Server.Start(50, 26950);
+        }
+
+        static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            Console.WriteLine("exit");
+            Server.playerDatabase.SavePlayers();
         }
 
         private static void MainThread()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DummyServer
@@ -30,6 +31,64 @@ namespace DummyServer
             }
             return false;
         }
+
+        public float GetAverageEloOfTeam(int team)
+        {
+            List<int> playerelos = new List<int>();
+            if (team == 0)
+            {
+
+                foreach (Lobby l in team1)
+                {
+                    foreach(Player p in l.GetPlayers())
+                    {
+                        playerelos.Add(p.elo);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Lobby l in team2)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        playerelos.Add(p.elo);
+                    }
+                }
+            }
+
+            return Convert.ToSingle(playerelos.Average());
+
+        }
+
+        public List<Player> GetTeam(int team)
+        {
+            List<Player> players = new List<Player>();
+            if (team == 0)
+            {
+
+                foreach (Lobby l in team1)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        players.Add(p);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Lobby l in team2)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        players.Add(p);
+                    }
+                }
+            }
+
+            return players;
+        }
+
 
         //Gives the max players to join one team -> max 3
         public int GetMaxFreePlaces()

@@ -149,6 +149,40 @@ namespace DummyServer
 
         }
 
+        public static void EndOfGame(int _fromClient, Packet _packet)
+        {
+            int team0wins = _packet.ReadInt(); 
+            int team1wins = _packet.ReadInt();
+            bool result = team0wins > team1wins;
+            Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if (m!= null)
+            {
+                List<int> newElos = EloSystem.CalculateEloRating(m.player1.elo, m.player2.elo, result);
+                m.player1.elo = newElos[0];
+                m.player2.elo = newElos[1];
+                ServerSend.SendEndOfGame(m.player1.id, team0wins, team1wins, m.player1.elo);
+                ServerSend.SendEndOfGame(m.player1.id, team0wins, team1wins, m.player1.elo);
+            }
+            else if(m2 != null)
+            {
+                float team0average = m2.GetAverageEloOfTeam(0);
+                float team1average = m2.GetAverageEloOfTeam(1);
+                List<int> newElos = EloSystem.CalculateEloRating(team0average, team1average, result);
+                foreach(Player p in m2.GetTeam(0))
+                {
+                    p.elo += newElos[0] - (int)team0average;
+                    ServerSend.SendEndOfGame(p.id, team0wins, team1wins, p.elo);
+                }
+                foreach (Player p in m2.GetTeam(1))
+                {
+                    p.elo += newElos[1] - (int)team1average;
+                    ServerSend.SendEndOfGame(p.id, team0wins, team1wins, p.elo);
+                }
+            }
+
+        }
+
         public static void OnNextRound(int _fromClient, Packet _packet)
         {
             Vector3 vaccinePos = _packet.ReadVector3();

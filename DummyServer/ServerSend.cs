@@ -211,10 +211,13 @@ namespace DummyServer
             }
         }
 
-        public static void OnNextRound(int _toClient)
+        public static void OnNextRound(int _toClient, Vector3 vaccinePos, Vector3 petePos, float peteRot)
         {
             using (Packet _packet = new Packet((int)ServerPackets.onNextRound))
             {
+                _packet.Write(vaccinePos);
+                _packet.Write(petePos);
+                _packet.Write(peteRot);
                 SendTCPData(_toClient, _packet);
             }
         }

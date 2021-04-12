@@ -151,12 +151,16 @@ namespace DummyServer
 
         public static void OnNextRound(int _fromClient, Packet _packet)
         {
+            Vector3 vaccinePos = _packet.ReadVector3();
+            Vector3 petePos = _packet.ReadVector3();
+            float peteRot = _packet.ReadFloat();
+
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
             if (m != null)
             {
-                ServerSend.OnNextRound(m.player1.id);
-                ServerSend.OnNextRound(m.player2.id);
+                ServerSend.OnNextRound(m.player1.id, vaccinePos, petePos, peteRot);
+                ServerSend.OnNextRound(m.player2.id, vaccinePos, petePos, peteRot);
             }
             else if (m2 != null)
             {
@@ -164,7 +168,7 @@ namespace DummyServer
                 {
                     foreach (Player p in l.GetPlayers())
                     {
-                        ServerSend.OnNextRound(p.id);
+                        ServerSend.OnNextRound(p.id, vaccinePos, petePos, peteRot);
                     }
                 }
 
@@ -172,7 +176,7 @@ namespace DummyServer
                 {
                     foreach (Player p in l.GetPlayers())
                     {
-                        ServerSend.OnNextRound(p.id);
+                        ServerSend.OnNextRound(p.id, vaccinePos, petePos, peteRot);
                     }
                 }
             }

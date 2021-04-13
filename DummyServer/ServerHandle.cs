@@ -162,7 +162,7 @@ namespace DummyServer
                 m.player1.elo = newElos[0];
                 m.player2.elo = newElos[1];
                 ServerSend.SendEndOfGame(m.player1.id, team0wins, team1wins, m.player1.elo);
-                ServerSend.SendEndOfGame(m.player1.id, team0wins, team1wins, m.player1.elo);
+                ServerSend.SendEndOfGame(m.player2.id, team0wins, team1wins, m.player2.elo);
                 Server.match1v1Database.matches.Remove(m);
             }
             else if(m2 != null)

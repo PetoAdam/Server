@@ -191,6 +191,7 @@ namespace DummyServer
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
 
+            Server.playerDatabase.GetPlayerById(id).isLoggedIn = false;
             tcp.Disconnect();
             udp.Disconnect();
         }

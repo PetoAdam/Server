@@ -191,7 +191,24 @@ namespace DummyServer
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
 
-            Server.playerDatabase.GetPlayerById(id).isLoggedIn = false;
+            Player player = Server.playerDatabase.GetPlayerById(id);
+            player.isLoggedIn = false;
+            Match m = Server.matchDatabase.GetMatchByPlayer(player);
+            Match1v1 m1 = Server.match1v1Database.GetMatchByPlayer(player);
+            if(m != null)
+            {
+                player.elo -= 20;
+                foreach (Player p in m.GetTeam(0))
+                {
+                    ServerSend.OnPlayerDisconnect(p.id, p.elo, player.username);
+                }
+            }
+            if(m1 != null)
+            {
+                player.elo -= 20;
+                ServerSend.OnPlayerDisconnect(m1.player1.id, m1.player1.elo, player.username);
+                ServerSend.OnPlayerDisconnect(m1.player2.id, m1.player2.elo, player.username);
+            }
             tcp.Disconnect();
             udp.Disconnect();
         }

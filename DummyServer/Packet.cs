@@ -31,6 +31,7 @@ namespace DummyServer
         onRoundEnd = 21,
         onNextRound = 22,
         endOfGame = 23,
+        onPlayerDisconnect = 24,
     }
 
     /// <summary>Sent from client to server.</summary>

@@ -211,6 +211,18 @@ namespace DummyServer
             }
         }
 
+        public static void OnPlayerDisconnect(int _toClient, int elo, string username)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.onPlayerDisconnect))
+            {
+                _packet.Write(elo);
+                _packet.Write(username);
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
         public static void OnNextRound(int _toClient, Vector3 vaccinePos, Vector3 petePos, float peteRot)
         {
             using (Packet _packet = new Packet((int)ServerPackets.onNextRound))

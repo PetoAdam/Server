@@ -76,6 +76,7 @@ namespace DummyServer
                     if(_byteLength <= 0)
                     {
                         Server.clients[id].Disconnect();
+                        return;
                     }
 
                     byte[] _data = new byte[_byteLength];

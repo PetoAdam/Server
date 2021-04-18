@@ -117,6 +117,17 @@ namespace DummyServer
                     }
                 }
 
+                foreach (Lobby lobby in m.team1)
+                {
+                    Server.lobbyDatabase.RemoveLobby(lobby);
+                }
+                foreach (Lobby lobby in m.team2)
+                {
+                    Server.lobbyDatabase.RemoveLobby(lobby);
+                }
+
+
+
             }
             matches.Clear();
         }

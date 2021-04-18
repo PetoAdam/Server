@@ -56,6 +56,8 @@ namespace DummyServer
                 Server.match1v1Database.matches.Add(m);
                 ServerSend.StartMatch1v1(m.player1.id, m.host.username + ":1");
                 ServerSend.StartMatch1v1(m.player2.id, m.host.username + ":2");
+                Server.lobbyDatabase.RemoveLobby(Server.lobbyDatabase.FindLobbyWithPlayer(m.player1));
+                Server.lobbyDatabase.RemoveLobby(Server.lobbyDatabase.FindLobbyWithPlayer(m.player2));
             }
             matches.Clear();
         }

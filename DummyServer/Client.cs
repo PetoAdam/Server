@@ -75,7 +75,7 @@ namespace DummyServer
                     int _byteLength = stream.EndRead(_result);
                     if(_byteLength <= 0)
                     {
-                        //TODO: disconnect
+                        Server.clients[id].Disconnect();
                     }
 
                     byte[] _data = new byte[_byteLength];
@@ -88,7 +88,7 @@ namespace DummyServer
                 catch(Exception _ex)
                 {
                     Console.WriteLine($"Error receiving TCP data: {_ex}");
-                    //TODO: disconnect
+                    Server.clients[id].Disconnect();
                 }
             }
 
@@ -179,12 +179,19 @@ namespace DummyServer
                     }
                 });
             }
+
+            public void Disconnect()
+            {
+                endPoint = null;
+            }
         }
 
         private void Disconnect()
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
-            //TODO
+
+            tcp.Disconnect();
+            udp.Disconnect();
         }
     }
 }

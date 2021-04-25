@@ -32,6 +32,7 @@ namespace DummyServer
         onNextRound = 22,
         endOfGame = 23,
         onPlayerDisconnect = 24,
+        onPlayerNotReady = 25,
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -55,7 +56,8 @@ namespace DummyServer
         onDying = 16,
         onRoundEnd = 17,
         onNextRound = 18,
-        endOfGame = 19
+        endOfGame = 19,
+        onPlayerNotReady = 20,
     }
 
     public class Packet : IDisposable

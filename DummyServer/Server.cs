@@ -143,6 +143,7 @@ namespace DummyServer
                 { (int)ClientPackets.onRoundEnd, ServerHandle.OnRoundEnd},
                 { (int)ClientPackets.onNextRound, ServerHandle.OnNextRound},
                 { (int)ClientPackets.endOfGame, ServerHandle.EndOfGame},
+                { (int)ClientPackets.onPlayerNotReady, ServerHandle.OnPlayerNotReady},
 
 
             };

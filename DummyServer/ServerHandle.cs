@@ -149,6 +149,49 @@ namespace DummyServer
 
         }
 
+        public static void OnPlayerNotReady(int _fromClient, Packet _packet)
+        {
+            Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if (m != null)
+            {
+                if (m.player1.isLoggedIn)
+                {
+                    ServerSend.OnPlayerNotReady(m.player1.id);
+                }
+
+                if (m.player2.isLoggedIn)
+                {
+                    ServerSend.OnPlayerNotReady(m.player2.id);
+                }
+               
+            }
+            else if (m2 != null)
+            {
+                foreach (Lobby l in m2.team1)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        if (p.isLoggedIn)
+                        {
+                            ServerSend.OnPlayerNotReady(p.id);
+                        }
+                    }
+                }
+
+                foreach (Lobby l in m2.team2)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        if (p.isLoggedIn)
+                        {
+                            ServerSend.OnPlayerNotReady(p.id);
+                        }
+                    }
+                }
+            }
+        }
+
         public static void EndOfGame(int _fromClient, Packet _packet)
         {
             int team0wins = _packet.ReadInt(); 

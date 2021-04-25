@@ -209,6 +209,33 @@ namespace DummyServer
                 ServerSend.OnPlayerDisconnect(m1.player1.id, m1.player1.elo, player.username);
                 ServerSend.OnPlayerDisconnect(m1.player2.id, m1.player2.elo, player.username);
             }
+
+            Lobby lobby = Server.lobbyDatabase.FindLobbyWithPlayer(player);
+            if (lobby != null)
+            {
+                if (lobby.leader.username == player.username)
+                {
+                    foreach (Player p in lobby.GetPlayers())
+                    {
+                        if (p.username != player.username)
+                        {
+                            ServerSend.LeaveLobby(p.id, "The leader has left the lobby");
+                        }
+                    }
+                    Server.lobbyDatabase.RemoveLobby(lobby);
+                }
+                else
+                {
+                    Server.lobbyDatabase.FindLobbyWithPlayer(player).RemovePlayer(player);
+                    lobby.RemovePlayer(player);
+                    foreach (Player p in lobby.GetPlayers())
+                    {
+                        ServerSend.LeaveLobby(p.id, lobby.GetLobbyData());
+                    }
+                }
+            }
+
+
             tcp.Disconnect();
             udp.Disconnect();
         }

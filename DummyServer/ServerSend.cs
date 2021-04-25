@@ -223,6 +223,14 @@ namespace DummyServer
             }
         }
 
+        public static void OnPlayerNotReady(int _toClient)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.onPlayerNotReady))
+            {
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
         public static void OnNextRound(int _toClient, Vector3 vaccinePos, Vector3 petePos, float peteRot)
         {
             using (Packet _packet = new Packet((int)ServerPackets.onNextRound))

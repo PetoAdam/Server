@@ -511,7 +511,32 @@ namespace DummyServer
         public static void OnReadyButtonClicked(int _fromClient, Packet _packet)
         {
             string hostname = _packet.ReadString();
-            ServerSend.OnReadyButtonClicked(Server.playerDatabase.GetPlayerByName(hostname).id);
+            if (Server.playerDatabase.GetPlayerByName(hostname).isLoggedIn)
+            {
+                ServerSend.OnReadyButtonClicked(Server.playerDatabase.GetPlayerByName(hostname).id);
+            }
+            else
+            {
+                Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+                if (m2 != null)
+                {
+                    foreach (Lobby l in m2.team1)
+                    {
+                        foreach (Player p in l.GetPlayers())
+                        {
+                            ServerSend.OnPlayerNotReady(p.id);
+                        }
+                    }
+
+                    foreach (Lobby l in m2.team2)
+                    {
+                        foreach (Player p in l.GetPlayers())
+                        {
+                            ServerSend.OnPlayerNotReady(p.id);
+                        }
+                    }
+                }
+            }
         }
 
         public static void Searching1v1Match(int _fromClient, Packet _packet)
@@ -522,7 +547,19 @@ namespace DummyServer
         public static void OnReadyButtonClicked1v1(int _fromClient, Packet _packet)
         {
             string hostname = _packet.ReadString();
-            ServerSend.OnReadyButtonClicked1v1(Server.playerDatabase.GetPlayerByName(hostname).id);
+            if (Server.playerDatabase.GetPlayerByName(hostname).isLoggedIn)
+            {
+                ServerSend.OnReadyButtonClicked1v1(Server.playerDatabase.GetPlayerByName(hostname).id);
+            }
+            else
+            {
+                Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+                if (m != null)
+                {
+                    ServerSend.OnPlayerNotReady(m.player1.id);
+                    ServerSend.OnPlayerNotReady(m.player2.id);
+                }
+            }
         }
 
         public static void OnSendIntoGame1v1(int _fromClient, Packet _packet)

@@ -80,7 +80,7 @@ namespace DummyServer
                 Dictionary<Player, long> sortedPlayerPings = new Dictionary<Player, long>();
                 Console.WriteLine(m.team1[0].leader.username);
                 Console.WriteLine(m.team2[0].leader.username);
-                //TODO player spawning and stuff
+
                 foreach(Lobby lobby in m.team1)
                 {
                     foreach(Player p in lobby.GetPlayers())
@@ -135,6 +135,8 @@ namespace DummyServer
 
         private long PingPlayer(Player p)
         {
+            if (!p.isLoggedIn)
+                return 10000;
             string remoteEndPoint = Server.clients[p.id].tcp.socket.Client.RemoteEndPoint.ToString();
             string ipAddress = remoteEndPoint.Split(':')[0];
             Ping sendPing = new Ping();

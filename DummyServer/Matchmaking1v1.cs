@@ -33,8 +33,16 @@ namespace DummyServer
                 {
                     var player1 = orderedPlayers[i];
                     var player2 = orderedPlayers[i+1];
-                    var ping1 = PingPlayer(player1);
-                    var ping2 = PingPlayer(player2);
+
+                    long ping1 = 10000;
+                    long ping2 = 10000;
+
+                    if(player1.isLoggedIn && player2.isLoggedIn)
+                    {
+                        ping1 = PingPlayer(player1);
+                        ping2 = PingPlayer(player2);
+                    }
+                    
 
                     var host = ping1 < ping2 ? player1 : player2;
 

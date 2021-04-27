@@ -149,6 +149,38 @@ namespace DummyServer
 
         }
 
+        public static void PlaySound(int _fromClient, Packet _packet)
+        {
+            string name = _packet.ReadString();
+            Vector3 position = _packet.ReadVector3();
+
+            Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            Match m2 = Server.matchDatabase.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));
+            if (m != null)
+            {
+                ServerSend.PlaySound(m.player1.id, name, position);
+                ServerSend.PlaySound(m.player2.id, name, position);
+            }
+            else if (m2 != null)
+            {
+                foreach (Lobby l in m2.team1)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        ServerSend.PlaySound(p.id, name, position);
+                    }
+                }
+
+                foreach (Lobby l in m2.team2)
+                {
+                    foreach (Player p in l.GetPlayers())
+                    {
+                        ServerSend.PlaySound(p.id, name, position);
+                    }
+                }
+            }
+        }
+
         public static void OnPlayerNotReady(int _fromClient, Packet _packet)
         {
             Match1v1 m = Server.match1v1Database.GetMatchByPlayer(Server.playerDatabase.GetPlayerById(_fromClient));

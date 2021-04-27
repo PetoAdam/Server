@@ -223,6 +223,16 @@ namespace DummyServer
             }
         }
 
+        public static void PlaySound(int _toClient, string name, Vector3 position)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.playSound))
+            {
+                _packet.Write(name);
+                _packet.Write(position);
+                SendUDPData(_toClient, _packet);
+            }
+        }
+
         public static void OnPlayerNotReady(int _toClient)
         {
             using (Packet _packet = new Packet((int)ServerPackets.onPlayerNotReady))

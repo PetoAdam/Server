@@ -211,6 +211,16 @@ namespace DummyServer
             }
         }
 
+        public static void DisconnectInMatchmaking(int _toClient)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.disconnectInMatchmaking))
+            {
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
         public static void OnPlayerDisconnect(int _toClient, int elo, string username)
         {
             using (Packet _packet = new Packet((int)ServerPackets.onPlayerDisconnect))

@@ -34,6 +34,7 @@ namespace DummyServer
         onPlayerDisconnect = 24,
         onPlayerNotReady = 25,
         playSound = 26,
+        disconnectInMatchmaking = 27,
     }
 
     /// <summary>Sent from client to server.</summary>

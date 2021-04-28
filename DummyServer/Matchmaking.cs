@@ -24,13 +24,30 @@ namespace DummyServer
         public  List<Lobby> lobbies = new List<Lobby>();
         public  List<Match> matches = new List<Match>();
 
-        public  void CallAfterDelay()
+        public void CallAfterDelay()
         {
             while (true)
             {
-                Search();
+                lock (this)
+                {
+                    Search();
+                }
+                
                 Thread.Sleep(10000);
             }
+        }
+
+        public Lobby FindLobbyWithPlayer(Player player)
+        {
+            foreach(Lobby l in lobbies)
+            {
+                if (l.GetPlayers().Contains(player))
+                {
+                    return l;
+                }
+            }
+
+            return null;
         }
         
 

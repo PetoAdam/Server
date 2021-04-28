@@ -15,11 +15,22 @@ namespace DummyServer
 
         }
 
+        public void RemovePlayer(Player player)
+        {
+            if (players.Contains(player))
+            {
+                players.Remove(player);
+            }
+        }
+
         public void CallAfterDelay()
         {
             while (true)
             {
-                Search();
+                lock (this)
+                {
+                    Search();
+                }
                 Thread.Sleep(10000);
             }
         }

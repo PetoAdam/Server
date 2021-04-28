@@ -193,6 +193,27 @@ namespace DummyServer
 
             Player player = Server.playerDatabase.GetPlayerById(id);
             player.isLoggedIn = false;
+
+
+            Lobby l = Server.matchmaking.FindLobbyWithPlayer(player);
+            if (l != null)
+            {
+                lock (Server.matchmaking)
+                {
+                    Server.matchmaking.lobbies.Remove(l);
+                }
+                foreach(Player p in l.GetPlayers())
+                {
+                    ServerSend.DisconnectInMatchmaking(p.id);
+                }
+
+            }
+
+            lock (Server.matchmaking1v1)
+            {
+                Server.matchmaking1v1.RemovePlayer(player);
+            }
+
             Match m = Server.matchDatabase.GetMatchByPlayer(player);
             Match1v1 m1 = Server.match1v1Database.GetMatchByPlayer(player);
             if(m != null)
@@ -234,6 +255,7 @@ namespace DummyServer
                     }
                 }
             }
+
 
 
             tcp.Disconnect();

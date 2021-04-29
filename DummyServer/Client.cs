@@ -204,7 +204,10 @@ namespace DummyServer
                 }
                 foreach(Player p in l.GetPlayers())
                 {
-                    ServerSend.DisconnectInMatchmaking(p.id);
+                    if(player != p)
+                    {
+                        ServerSend.DisconnectInMatchmaking(p.id);
+                    }
                 }
 
             }

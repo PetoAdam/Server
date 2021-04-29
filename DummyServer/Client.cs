@@ -209,13 +209,14 @@ namespace DummyServer
                         ServerSend.DisconnectInMatchmaking(p.id);
                     }
                 }
-
             }
 
             lock (Server.matchmaking1v1)
             {
                 Server.matchmaking1v1.RemovePlayer(player);
             }
+            Server.lobbyDatabase.RemoveLobby(l);
+
 
             Match m = Server.matchDatabase.GetMatchByPlayer(player);
             Match1v1 m1 = Server.match1v1Database.GetMatchByPlayer(player);

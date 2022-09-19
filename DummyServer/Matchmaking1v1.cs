@@ -57,7 +57,7 @@ namespace DummyServer
 
                     var host = ping1 < ping2 ? player1 : player2;
 
-                    matches.Add(new Match1v1() {player1 = player1, player2=player2, host = host });
+                    matches.Add(new Match1v1() {player1 = player1, player2=player2, host = "" }); //Add Docker ip + port
                 }
             }
             foreach(Match1v1 m in matches)
@@ -65,7 +65,7 @@ namespace DummyServer
                 players.Remove(m.player1);
                 players.Remove(m.player2);
             }
-            StartMatches();
+            new Thread(StartMatches).Start();
         }
 
         private void StartMatches()
@@ -73,10 +73,10 @@ namespace DummyServer
             foreach(Match1v1 m in matches)
             {
                 Server.match1v1Database.matches.Add(m);
-                ServerSend.StartMatch1v1(m.player1.id, m.host.username + ":1");
-                ServerSend.StartMatch1v1(m.player2.id, m.host.username + ":2");
-                Server.lobbyDatabase.RemoveLobby(Server.lobbyDatabase.FindLobbyWithPlayer(m.player1));
-                Server.lobbyDatabase.RemoveLobby(Server.lobbyDatabase.FindLobbyWithPlayer(m.player2));
+                ServerSend.StartMatch1v1(m.player1.id, m.host);
+                ServerSend.StartMatch1v1(m.player2.id, m.host);
+                //Server.lobbyDatabase.RemoveLobby(Server.lobbyDatabase.FindLobbyWithPlayer(m.player1));
+                //Server.lobbyDatabase.RemoveLobby(Server.lobbyDatabase.FindLobbyWithPlayer(m.player2));
             }
             matches.Clear();
         }

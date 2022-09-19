@@ -123,14 +123,14 @@ namespace DummyServer
                 {
                     foreach (Player p in lobby.GetPlayers())
                     {
-                        ServerSend.StartMatch(p.id, match.host.username + ":0");
+                        //ServerSend.StartMatch(p.id, match.host.username + ":0");
                     }
                 }
                 foreach (Lobby lobby in m.team2)
                 {
                     foreach (Player p in lobby.GetPlayers())
                     {
-                        ServerSend.StartMatch(p.id, match.host.username + ":1");
+                        //ServerSend.StartMatch(p.id, match.host.username + ":1");
                     }
                 }
 

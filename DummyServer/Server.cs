@@ -125,26 +125,8 @@ namespace DummyServer
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
-                { (int) ClientPackets.createLobby, ServerHandle.CreateLobby},
-                { (int)ClientPackets.inviteToLobby, ServerHandle.InviteToLobby },
-                { (int)ClientPackets.joinLobby, ServerHandle.JoinLobby },
-                { (int)ClientPackets.leaveLobby, ServerHandle.LeaveLobby },
-                { (int)ClientPackets.searchingMatch, ServerHandle.SearchingMatch },
                 { (int)ClientPackets.udpTestReceive, ServerHandle.UDPTestReceive },
-                { (int)ClientPackets.sceneLoaded, ServerHandle.OnReadyButtonClicked},
-                { (int)ClientPackets.sendIntoGame, ServerHandle.OnSendIntoGame},
-                { (int)ClientPackets.searching1v1Match, ServerHandle.Searching1v1Match},
-                { (int)ClientPackets.sceneLoaded1v1, ServerHandle.OnReadyButtonClicked1v1},
-                { (int)ClientPackets.sendIntoGame1v1, ServerHandle.OnSendIntoGame1v1},
-                { (int)ClientPackets.playerMovement, ServerHandle.OnPlayerMovement},
-                { (int)ClientPackets.onPlayerMovementResponse, ServerHandle.OnPlayerMovementResponse},
-                { (int)ClientPackets.shooting, ServerHandle.OnShooting},
-                { (int)ClientPackets.onDying, ServerHandle.OnDying},
-                { (int)ClientPackets.onRoundEnd, ServerHandle.OnRoundEnd},
-                { (int)ClientPackets.onNextRound, ServerHandle.OnNextRound},
-                { (int)ClientPackets.endOfGame, ServerHandle.EndOfGame},
-                { (int)ClientPackets.onPlayerNotReady, ServerHandle.OnPlayerNotReady},
-                { (int)ClientPackets.playSound, ServerHandle.PlaySound},
+                { (int)ClientPackets.searching1v1Match, ServerHandle.SearchingMatch1v1 }
 
 
             };

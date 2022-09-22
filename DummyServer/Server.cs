@@ -27,7 +27,7 @@ namespace DummyServer
         {
             MaxPlayers = _maxPlayers;
             Port = _port;
-
+             
             Console.WriteLine("Starting server...");
             InitializeServerData();
 
